@@ -12,22 +12,18 @@ function getRandomCoords() {
 }
 
 function orangeBlast() {
-  burst(Object.assign(
-    {
-      size: _.random(100, 150),
-    },
-    getRandomCoords()
-  ));
+  burst({
+    size: _.random(100, 150),
+    ...getRandomCoords()
+  });
 }
 
 function blueBlast() {
-  const opts = Object.assign(
-    {
-      size: _.random(50, 200),
-      color: 'rgba(49, 153, 249, 0.5)'
-    }, getRandomCoords()
-  );
-  burst(opts);
+  burst({
+    size: _.random(50, 200),
+    color: 'rgba(49, 153, 249, 0.5)',
+    ...getRandomCoords()
+  });
 }
 
 function burst(opts) {
@@ -36,14 +32,13 @@ function burst(opts) {
 
 function greenBlast() {
   const size = _.random(50, 200);
-  burst(Object.assign(
-    {
-      size: size,
-      sizeStart: _.max(size/6, 30),
-      color: 'rgba(49, 233, 149, 0.5)'
-    },
-    getRandomCoords()
-  ));
+
+  burst({
+    size: size,
+    sizeStart: _.max(size/6, 30),
+    color: 'rgba(49, 233, 149, 0.5)',
+    ...getRandomCoords()
+  });
 }
 
 // ========
@@ -62,13 +57,6 @@ document.addEventListener('click', function(e) {
 }, false);
 
 window.addEventListener('keydown', function (event) {
-  if (event.key === 'z') {
-    orangeBlast();
-  } else if (event.key === 'x') {
-    blueBlast();
-  } else if (event.key === 'c') {
-    greenBlast();
-  }
   switch(event.key) {
     case 'z':
       orangeBlast();
