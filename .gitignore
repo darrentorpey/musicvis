@@ -1,4 +1,8 @@
 node_modules
 lib
 public/lib
+public/js
 yarn.lock
+.DS_Store
+*.sublime-*
+npm-debug.log

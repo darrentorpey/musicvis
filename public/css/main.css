@@ -1,12 +1,26 @@
+:root{
+  --main-color: rgb(43, 123, 160);
+}
+
 body, html {
   background: black;
   width: 100vw;
   height: 100vh;
   font-family: "Rubik", sans-serif;
-  color: #2b7ba0;
+  color: var(--main-color);
   text-align: center;
   letter-spacing: 0.03em;
   overflow: hidden;
   user-select: none;
   cursor: pointer;
+}
+
+h3 {
+  font-size: 28px;
+  text-transform: uppercase;
+  color: rgba(43, 123, 160, 0.2);
+}
+
+audio {
+  width: 600px;
 }
