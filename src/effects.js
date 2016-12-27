@@ -1,3 +1,5 @@
+import { Timeline } from './scheduling';
+
 // Base class for complex effects
 class Effect {
   constructor() {
@@ -58,4 +60,32 @@ function blastWaveShape({
     duration: speed,
     opacity:  { 1: 0 }
   });
+}
+
+// Made of circles
+export class Starburst {
+  constructor(opts = {}) {
+    this.__id = parseInt(new Date());
+    this.initSet(opts);
+  }
+
+  initSet(opts) {
+    this.circle = new DoubleCircle(opts);
+
+    this.timeline = Timeline.set( this.circle.elements );
+  }
+
+  moveTo(coords) {
+    this.circle.moveTo(coords);
+  }
+
+  play() {
+    this.timeline.replay();
+  }
+
+  moveToCoords(coords) {
+    this.moveTo(coords);
+
+    this.timeline.replay();
+  }
 }

@@ -1,44 +1,4 @@
-import { DoubleCircle } from './effects.js';
-
-// Mo.js utility
-const Timeline = {
-  set(...items) {
-    if (items.length === 1) {
-      items = [items];
-    }
-    const timeline = new mojs.Timeline();
-    timeline.add(...items);
-    return timeline;
-  }
-};
-
-// Made of circles
-class Starburst {
-  constructor(opts = {}) {
-    this.__id = parseInt(new Date());
-    this.initSet(opts);
-  }
-
-  initSet(opts) {
-    this.circle = new DoubleCircle(opts);
-
-    this.timeline = Timeline.set( this.circle.elements );
-  }
-
-  moveTo(coords) {
-    this.circle.moveTo(coords);
-  }
-
-  play() {
-    this.timeline.replay();
-  }
-
-  moveToCoords(coords) {
-    this.moveTo(coords);
-
-    this.timeline.replay();
-  }
-}
+import { Starburst } from './effects.js';
 
 function getRandomCoords() {
   const padding = 60;
