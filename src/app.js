@@ -1,54 +1,51 @@
 import { Starburst } from './effects.js';
+import WaterBursts from './shows.js';
+import { getRandomScreenCoords } from './positioning.js'
 
-function getRandomCoords() {
-  const padding = 60;
-  const yMax = window.innerHeight;
-  const xMax = window.innerWidth;
-
-  return {
-    x: _.random(padding, xMax),
-    y: _.random(padding, yMax)
-  };
-}
-
-function orangeBlast() {
-  burst({
-    size: _.random(100, 150),
-    ...getRandomCoords()
-  });
-}
-
-function blueBlast() {
-  burst({
-    size: _.random(50, 200),
-    color: 'rgba(49, 153, 249, 0.5)',
-    ...getRandomCoords()
-  });
+function play(effect, opts) {
+  new Starburst(opts).play();
 }
 
 function burst(opts) {
   new Starburst(opts).play();
 }
 
-function greenBlast() {
-  const size = _.random(50, 200);
-
-  burst({
-    size: size,
-    sizeStart: _.max(size/6, 30),
-    color: 'rgba(49, 233, 149, 0.5)',
-    ...getRandomCoords()
+function orangeBlast() {
+  play(Starburst, {
+    size: _.random(100, 150),
+    ...getRandomScreenCoords()
   });
 }
 
-// ========
-// Controls
-// --------
+function blueBlast() {
+  play(Starburst, {
+    size:  _.random(50, 200),
+    color: 'rgba(49, 153, 249, 0.5)',
+    ...getRandomScreenCoords()
+  });
+}
+
+function greenBlast() {
+  const size = _.random(2, 8);
+  const pixelSize = size * 25;
+
+  play(Starburst, {
+    size:      pixelSize,
+    sizeStart: _.max(pixelSize/6, 45),
+    speed:     2000 - pixelSize,
+    color:     'rgba(49, 233, 149, 0.5)',
+    ...getRandomScreenCoords()
+  });
+}
+
 /*
-Keys:
- [z] - draw orange burst
- [x] - draw blue burst
- [c] - draw green burst
+ ========
+ Controls
+ --------
+ Keys:
+  [z] - draw orange burst
+  [x] - draw blue burst
+  [c] - draw green burst
 */
 
 document.addEventListener('click', function(e) {
@@ -56,8 +53,8 @@ document.addEventListener('click', function(e) {
   newStarburst.moveToCoords({ x: e.pageX, y: e.pageY });
 }, false);
 
-window.addEventListener('keydown', function (event) {
-  switch(event.key) {
+window.addEventListener('keydown', function(e) {
+  switch(e.key) {
     case 'z':
       orangeBlast();
       break;
@@ -67,5 +64,10 @@ window.addEventListener('keydown', function (event) {
     case 'c':
       greenBlast();
       break;
+    case 'w':
+      WaterBursts.play();
+      break;
   }
 });
+
+

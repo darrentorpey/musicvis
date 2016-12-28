@@ -25,16 +25,12 @@ export class DoubleCircle extends Effect {
   constructor(opts = {}) {
     super();
 
-    opts = Object.assign(
-      {
-        color: 'rgba(249, 153, 49, 0.5)'
-      },
-      opts
+    this.registerElement(
+      blastWaveShape({
+        color: 'rgba(249, 153, 49, 0.5)',
+        ...opts
+      })
     );
-
-    this.mainCircle = blastWaveShape(opts);
-
-    this.registerElement(this.mainCircle);
   }
 }
 
