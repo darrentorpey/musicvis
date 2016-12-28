@@ -1,7 +1,7 @@
 import { Timeline } from './scheduling';
 
 // Base class for complex effects
-class Effect {
+export class Effect {
   constructor() {
     this._elements = [];
   }
@@ -14,6 +14,10 @@ class Effect {
     this.elements.forEach((el) => {
       el.tune(coords);
     });
+  }
+
+  regenerate() {
+    this.elements.forEach(el => el.generate());
   }
 
   get elements() {

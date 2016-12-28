@@ -1,5 +1,5 @@
 import { Starburst } from './effects.js';
-import WaterBursts from './shows.js';
+import WaterBurst from './shows.js';
 import { getRandomScreenCoords } from './positioning.js'
 
 function play(effect, opts) {
@@ -65,7 +65,7 @@ window.addEventListener('keydown', function(e) {
       greenBlast();
       break;
     case 'w':
-      WaterBursts.play();
+      WaterBurst.play();
       break;
   }
 });
