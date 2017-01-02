@@ -1,5 +1,5 @@
-import { Starburst } from './effects.js';
-import WaterBurst from './shows.js';
+import { Starburst, WaterBurst } from './effects.js';
+import { BubbleField } from './shows.js';
 import { getRandomScreenCoords } from './positioning.js'
 
 function play(effect, opts) {
@@ -67,7 +67,9 @@ window.addEventListener('keydown', function(e) {
     case 'w':
       WaterBurst.play();
       break;
+    case 'g':
+      const bf = new BubbleField({ y: window.innerHeight * .80 });
+      bf.play();
+      break;
   }
 });
-
-
