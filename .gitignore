@@ -3,3 +3,5 @@ lib
 public/lib
 public/js
 yarn.lock
+.DS_Store
+*.sublime-*
