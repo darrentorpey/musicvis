@@ -3,10 +3,14 @@ body, html {
   width: 100vw;
   height: 100vh;
   font-family: "Rubik", sans-serif;
-  color: #2b7ba0;
+  color: rgb(43, 123, 160);
   text-align: center;
   letter-spacing: 0.03em;
   overflow: hidden;
   user-select: none;
   cursor: pointer;
+}
+
+h3 {
+  color: rgba(43, 123, 160, 0.3);
 }
