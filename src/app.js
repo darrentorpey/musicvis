@@ -14,7 +14,7 @@ import { blueBlast, orangeBlast, greenBlast } from './effects.js';
 */
 bindToKeys();
 
-bindToClicks();
+// bindToClicks();
 
 
 /*
@@ -23,7 +23,18 @@ bindToClicks();
  --------
  Start the music and run timed effects
  */
-window.clock = getAudioClock('http://localhost:3000/sound/first_breath.mp3');
+// window.clock = getAudioClock({ url: 'http://localhost:3000/sound/first_breath.mp3' });
+
+window._song = document.querySelector('audio');
+window.clock = getAudioClock({ el: _song });
+
+// window._song = document.querySelector('audio');
+window._song.play();
+// window._songClock = new WAAClock(_song);
+
+// document.querySelector('audio').onload = function() {
+//   console.log('here, now');
+// };
 
 const actionShortcuts = {
   'water': () => WaterBurst.play(),
@@ -39,9 +50,9 @@ function atTime(time, action) {
 }
 
 function times(timedData) {
-  for (let [time, action] of timedData) {
-    atTime(time, action);
-  }
+  // for (let [time, action] of timedData) {
+  //   atTime(time, action);
+  // }
 }
 
 times([
