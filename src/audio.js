@@ -1,5 +1,5 @@
 
-export function getData(url) {
+export function getData(url, callback = () => {}) {
   var audioCtx = new AudioContext();
   var source = audioCtx.createBufferSource();
   var request = new XMLHttpRequest();
@@ -12,6 +12,7 @@ export function getData(url) {
     audioCtx.decodeAudioData(request.response, function(buffer) {
         source.buffer = buffer;
         source.connect(audioCtx.destination);
+        callback(source);
       },
       (e) => `Error with decoding audio data ${e.err}`);
   }
@@ -21,15 +22,30 @@ export function getData(url) {
   return source;
 }
 
-function getAudioClockFromUrl(url) {
-  var source = getData(url);
-  window._source = source;
-  var clock = new WAAClock(source.context);
-  clock.start();
-  source.start();
-  return clock;
+export function getAudioData(url) {
+  return new Promise(resolve => {
+    return getData(url, resolve);
+  });
 }
 
+function getAudioClockFromUrl(url) {
+  return getAudioData(url).then(source => {
+    const clock = new WAAClock(source.context);
+    clock.start();
+    source.start();
+
+    return { source, clock };
+  });
+}
+
+// window._song = document.querySelector('audio');
+// window.clock = getAudioClock({ el: _song });
+// window._song = document.querySelector('audio');
+// window._song.play();
+// window._songClock = new WAAClock(_song);
+// document.querySelector('audio').onload = function() {
+//   console.log('here, now');
+// };
 function getAudioClockFromElement(el) {
   var audioCtx = new AudioContext();
   window._audioCtx = audioCtx;
