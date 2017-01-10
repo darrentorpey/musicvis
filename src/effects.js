@@ -182,6 +182,14 @@ export function blueBlast() {
   });
 }
 
+export function lightBlueBlast() {
+  play(Starburst, {
+    size:  _.random(50, 200),
+    color: 'rgba(95, 210, 251, 0.5)',
+    ...getRandomScreenCoords()
+  });
+}
+
 export function greenBlast() {
   const size = _.random(2, 8);
   const pixelSize = size * 25;

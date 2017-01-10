@@ -1,7 +1,7 @@
 import { WaterBurst } from './effects.js';
 import { bindToClicks, bindToKeys } from './controls.js';
 import { getAudioClock } from './audio.js';
-import { blueBlast, orangeBlast, greenBlast } from './effects.js';
+import { blueBlast, lightBlueBlast, orangeBlast, greenBlast } from './effects.js';
 
 /*
  ========
@@ -23,53 +23,54 @@ bindToKeys();
  --------
  Start the music and run timed effects
  */
-// window.clock = getAudioClock({ url: 'http://localhost:3000/sound/first_breath.mp3' });
 
-window._song = document.querySelector('audio');
-window.clock = getAudioClock({ el: _song });
+getAudioClock({
+  url: 'http://localhost:3000/sound/first_breath.mp3'
+}).then(
+  startShow
+);
 
-// window._song = document.querySelector('audio');
-window._song.play();
-// window._songClock = new WAAClock(_song);
+function startShow({ source, clock }) {
+  window._show = { source, clock };
 
-// document.querySelector('audio').onload = function() {
-//   console.log('here, now');
-// };
+  const actionShortcuts = {
+    'water':          () => WaterBurst.play(),
+    'boom_green':     () => greenBlast(),
+    'boom_blue':      () => blueBlast(),
+    'boom_lightblue': () => lightBlueBlast(),
+    'boom_orange':    () => orangeBlast()
+  };
 
-const actionShortcuts = {
-  'water': () => WaterBurst.play(),
-  'boom_green': () => greenBlast(),
-  'boom_blue': () => blueBlast(),
-  'boom_orange': () => orangeBlast()
-};
+  function atTime(time, action) {
+    if (!_.isFunction(action)) {
+      action = actionShortcuts[action];
+    }
 
-function atTime(time, action) {
-  action = actionShortcuts[action] || action;
+    clock.callbackAtTime(action, time);
+  }
 
-  window.clock.callbackAtTime(action, time);
+  function times(timedData) {
+    for (let [time, action] of timedData) {
+      atTime(time, action);
+    }
+  }
+
+  times([
+    [   1.00, 'boom_lightblue'  ],
+    [   4.88, 'boom_blue'   ],
+    [   8.83, 'boom_blue' ],
+    [  12.63, 'boom_blue'   ],
+    [  16.63, 'boom_lightblue'  ],
+    [  20.38, 'boom_blue'   ],
+    [  24.55, 'boom_blue' ],
+    [  28.48, 'boom_lightblue'  ],
+    [  29.48, 'boom_lightblue'  ],
+    [  30.40, 'boom_blue'  ],
+    [  31.38, 'boom_lightblue'  ],
+    [  32.39, 'boom_lightblue'  ],
+    [  33.35, 'boom_lightblue'  ],
+    [  34.35, 'boom_blue'  ],
+    [  35.33, 'boom_blue'  ],
+    [  36.28, 'boom_lightblue'  ],
+  ]);
 }
-
-function times(timedData) {
-  // for (let [time, action] of timedData) {
-  //   atTime(time, action);
-  // }
-}
-
-times([
-  [   1.00, 'boom_green'  ],
-  [   4.88, 'boom_blue'   ],
-  [   8.83, 'boom_orange' ],
-  [  12.63, 'boom_blue'   ],
-  [  16.63, 'boom_green'  ],
-  [  20.38, 'boom_blue'   ],
-  [  24.55, 'boom_orange' ],
-  [  28.48, 'boom_green'  ],
-  [  29.48, 'boom_green'  ],
-  [  30.40, 'boom_green'  ],
-  [  31.38, 'boom_green'  ],
-  [  32.39, 'boom_green'  ],
-  [  33.35, 'boom_green'  ],
-  [  34.35, 'boom_green'  ],
-  [  35.33, 'boom_green'  ],
-  [  36.28, 'boom_green'  ],
-]);
