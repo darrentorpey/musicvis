@@ -3,6 +3,8 @@ import { bindToClicks, bindToKeys } from './controls.js';
 import { getAudioClock } from './audio.js';
 import { blueBlast, lightBlueBlast, orangeBlast, greenBlast } from './effects.js';
 
+const DEBUG = false;
+
 /*
  ========
  Controls
@@ -11,6 +13,8 @@ import { blueBlast, lightBlueBlast, orangeBlast, greenBlast } from './effects.js
   [z] - draw orange burst
   [x] - draw blue burst
   [c] - draw green burst
+  [w] - draw water burst
+  [t] - output current sound-time
 */
 bindToKeys();
 
@@ -24,14 +28,21 @@ const actionShortcuts = {
   'boom_orange':    () => orangeBlast()
 };
 
-const program = [
+const mainProgram = [
   [   1.00, 'boom_lightblue'  ],
   [   4.88, 'boom_blue' ],
   [   8.83, 'boom_blue' ],
   [  12.63, 'boom_blue'   ],
   [  16.63, 'boom_lightblue'  ],
   [  20.38, 'boom_blue'   ],
+  [  24.00, 'water|water|water|water|water' ],
   [  24.55, 'boom_blue' ],
+  [  24.50, 'water|water|water|water|water' ],
+  [  25.00, 'water|water|water|water|water' ],
+  [  25.50, 'water|water|water|water|water' ],
+  [  26.00, 'water|water|water|water|water' ],
+  [  26.50, 'water|water|water|water|water' ],
+  [  27.00, 'water|water|water|water|water' ],
   [  28.48, 'boom_lightblue'  ],
   [  29.48, 'boom_lightblue'  ],
   [  30.40, 'boom_blue'  ],
@@ -41,28 +52,31 @@ const program = [
   [  34.35, 'boom_blue'  ],
   [  35.33, 'boom_blue'  ],
   [  36.28, 'boom_lightblue'  ],
-  [  24.40, 'water|water|water|water|water' ],
-  [  24.90, 'water|water|water|water|water' ],
-  [  25.40, 'water|water|water|water|water' ],
-  [  25.90, 'water|water|water|water|water' ],
-  [  26.40, 'water|water|water|water|water' ],
-  [  26.90, 'water|water|water|water|water' ],
-  [  27.40, 'water|water|water|water|water' ],
 ];
 
-function logScheduleItem({ action, adjustedTime }) {
-  console.log(`[${adjustedTime}] [${action}]`);
+function logScheduleItem({ action, time }) {
+  console.log(`[${time}] [${action}]`);
 }
 
 class Show {
   constructor({ song, clock, program }) {
     this.song = song;
     this.clock = clock;
+    this._originalProgram = _.clone(program);
     this.program = program;
+  }
+
+  resetClock() {
+    this.clock.stop();
+    this.clock._events = []
+    this.clock.start();
   }
 
   jumpTo(seconds) {
     this.song.replay(seconds);
+
+    this.resetClock();
+
     this.reschedule(seconds);
   }
 
@@ -75,22 +89,28 @@ class Show {
     }
   }
 
-  scheduleProgram(programData, offset = 0) {
-    for (let [time, action] of programData) {
-      let actions = this.parseActions(action);
-      let adjustedTime = time - offset;
-      actions.forEach(action => (adjustedTime > 0) && this.clock.callbackAtTime(action, adjustedTime));
-      // actions.forEach(action => (time > 0) && logScheduleItem({ action, adjustedTime }));
-      actions.forEach(action => logScheduleItem({ action, adjustedTime }));
+  scheduleProgram() {
+    for (let [time, action] of this.program) {
+      // this.parseActions(action).forEach(action => (time > 0) && this.clock.callbackAtTime(action, time));
+      this.parseActions(action).forEach(action => (time > 0) && this.clock.setTimeout(action, time));
     }
   }
 
-  start({ offset } = { offset: 0 }) {
-    this.scheduleProgram(this.program, offset);
+  start() {
+    this.scheduleProgram(this.program);
   }
 
   reschedule(seconds) {
-    this.start({ offset: seconds || this.song.startTime });
+    DEBUG && console.log(`Current Time: ${this.song.startTime}`);
+
+    this.program = this._originalProgram.map(([time, action]) => {
+      let adjustedTime = time - seconds;
+      return [adjustedTime, action];
+    })
+
+    DEBUG && this.program.forEach(([time, action]) => logScheduleItem({ action, time }));
+
+    this.start();
   }
 }
 
@@ -100,7 +120,6 @@ class Show {
  --------
  Start the music and run timed effects
  */
-
 getAudioClock({
   url: 'http://localhost:3000/sound/first_breath.mp3'
 }).then(
@@ -108,6 +127,6 @@ getAudioClock({
 );
 
 function startShow({ song, clock }) {
-  window._show = new Show({ song, clock, program });
+  window._show = new Show({ song, clock, program: mainProgram });
   window._show.start();
 }
