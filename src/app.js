@@ -41,14 +41,6 @@ function startShow({ song, clock }) {
     'boom_orange':    () => orangeBlast()
   };
 
-  function atTime(time, action) {
-    if (!_.isFunction(action)) {
-      action = actionShortcuts[action];
-    }
-
-    clock.callbackAtTime(action, time);
-  }
-
   function parseActions(action) {
     if (_.isFunction(action)) {
       return [action];
@@ -58,14 +50,14 @@ function startShow({ song, clock }) {
     }
   }
 
-  function times(timedData) {
+  function scheduleProgram(timedData) {
     for (let [time, action] of timedData) {
       let actions = parseActions(action);
-      actions.forEach(action => atTime(time, action));
+      actions.forEach(action => clock.callbackAtTime(action, time));
     }
   }
 
-  times([
+  const program = [
     [   1.00, 'boom_lightblue'  ],
     [   4.88, 'boom_blue' ],
     [   8.83, 'boom_blue' ],
@@ -89,5 +81,7 @@ function startShow({ song, clock }) {
     [  26.40, 'water|water|water|water|water' ],
     [  26.90, 'water|water|water|water|water' ],
     [  27.40, 'water|water|water|water|water' ],
-  ]);
+  ];
+
+  scheduleProgram(program);
 }

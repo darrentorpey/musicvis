@@ -6,6 +6,10 @@ class Song {
     this.startTime = null;
   }
 
+  stop() {
+    this.source.stop();
+  }
+
   start(at = 0) {
     this.source.start(0, at);
     this.startTime = this.context.currentTime;
@@ -43,29 +47,6 @@ export function getData(url) {
       audioCtx.decodeAudioData(request.response, function(buffer) {
           source.buffer = buffer;
           source.connect(audioCtx.destination);
-
-          // const song = {
-          //   currentSource: source,
-          //   context: audioCtx,
-          //   buffer: buffer,
-          //   start(at = 0) {
-          //     this.currentSource.start(0, at);
-
-          //     return this;
-          //   },
-          //   replay(at = 0) {
-          //     const newSource = this.context.createBufferSource(); // creates a sound source
-          //     newSource.buffer = this.buffer;                    // tell the source which sound to play
-          //     newSource.connect(this.context.destination);       // connect the source to the context's desti
-
-          //     this.currentSource.stop();
-          //     this.currentSource = newSource;
-
-          //     this.start(at);
-
-          //     return this;
-          //   }
-          // };
 
           resolve(new Song(buffer, source, audioCtx));
         },
