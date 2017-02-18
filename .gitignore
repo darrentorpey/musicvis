@@ -5,3 +5,4 @@ public/js
 yarn.lock
 .DS_Store
 *.sublime-*
+npm-debug.log
