@@ -18,6 +18,10 @@ export function bindToKeys() {
         case 'w':
           WaterBurst.play();
           break;
+        case 't':
+          var time = _show.song.context.currentTime.toString().match(/[0-9]+.?[0-9]{0,2}/);
+          console.log('Time was', time[0]);
+          break;
         case 'g':
           const bf = new BubbleField({ y: window.innerHeight * .80 });
           bf.play();
