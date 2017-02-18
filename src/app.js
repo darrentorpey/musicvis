@@ -89,15 +89,15 @@ class Show {
     }
   }
 
-  scheduleProgram() {
+  start() {
     for (let [time, action] of this.program) {
-      // this.parseActions(action).forEach(action => (time > 0) && this.clock.callbackAtTime(action, time));
       this.parseActions(action).forEach(action => (time > 0) && this.clock.setTimeout(action, time));
     }
   }
 
-  start() {
-    this.scheduleProgram(this.program);
+  stop() {
+    this.clock.stop();
+    this.song.stop();
   }
 
   reschedule(seconds) {
@@ -121,7 +121,7 @@ class Show {
  Start the music and run timed effects
  */
 getAudioClock({
-  url: 'http://localhost:3000/sound/first_breath.mp3'
+  url: 'http://localhost:3000/sound/first_breath_after_coma__0__4_25.mp3'
 }).then(
   startShow
 );
