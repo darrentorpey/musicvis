@@ -30,8 +30,8 @@ getAudioClock({
   startShow
 );
 
-function startShow({ source, clock }) {
-  window._show = { source, clock };
+function startShow({ song, clock }) {
+  window._show = { song, clock };
 
   const actionShortcuts = {
     'water':          () => WaterBurst.play(),
