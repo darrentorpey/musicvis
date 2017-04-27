@@ -12,7 +12,8 @@ body, html {
 }
 
 h3 {
-  color: rgba(43, 123, 160, 0.3);
+  font-size: 28px;
+  color: rgba(43, 123, 160, 0.2);
 }
 
 audio {
