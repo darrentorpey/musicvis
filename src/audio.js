@@ -31,26 +31,43 @@ class Song {
   }
 }
 
+function newDecodedSource(audioData) {
+  const audioCtx = new AudioContext();
+
+  return new Promise((resolve) => {
+    audioCtx.decodeAudioData(audioData, buffer => {
+      const source = createBufferSource(audioCtx, buffer);
+
+      resolve([audioCtx, buffer, source]);
+    },
+    (e) => `Error with decoding audio data ${e.err}`
+    );
+  });
+}
+
+function createBufferSource(audioCtx, buffer) {
+  const audioTrack = audioCtx.createBufferSource();
+
+  audioTrack.connect(audioCtx.destination);
+  audioTrack.buffer = buffer;
+
+  return audioTrack;
+}
+
+function playAudio(audioCtx, buffer, offsetInSeconds, duration) {
+  audioTrack.start(audioCtx.currentTime, offsetInSeconds,  duration);
+}
+
+
 export function getData(url) {
   return new Promise((resolve) => {
-    var audioCtx = new AudioContext();
-    var source = audioCtx.createBufferSource();
     var request = new XMLHttpRequest();
-
     request.open('GET', url, true);
-
     request.responseType = 'arraybuffer';
-
     request.send();
-
-    request.onload = function() {
-      audioCtx.decodeAudioData(request.response, function(buffer) {
-          source.buffer = buffer;
-          source.connect(audioCtx.destination);
-
-          resolve(new Song(buffer, source, audioCtx));
-        },
-        (e) => `Error with decoding audio data ${e.err}`);
+    request.onload = () => {
+      newDecodedSource(request.response).then(([audioCtx, buffer, source]) =>
+        resolve(new Song(buffer, source, audioCtx)));
     }
   });
 }
