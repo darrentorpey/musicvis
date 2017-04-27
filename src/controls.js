@@ -19,8 +19,8 @@ export function bindToKeys() {
           WaterBurst.play();
           break;
         case 't':
-          var time = _show.song.context.currentTime.toString().match(/[0-9]+.?[0-9]{0,2}/);
-          console.log('Time was', time[0]);
+          const time = _show.song.context.currentTime.toString().match(/[0-9]+.?[0-9]{0,2}/)[0];
+          console.log('Time was', time);
           break;
         case 'g':
           const bf = new BubbleField({ y: window.innerHeight * .80 });
@@ -32,13 +32,13 @@ export function bindToKeys() {
 
 export function bindToClicks() {
     document.addEventListener('click', function(e) {
-      const newStarburst = new Starburst();
+        const newStarburst = new Starburst();
 
-      newStarburst.moveToCoords({ x: e.pageX, y: e.pageY });
+        newStarburst.moveToCoords({ x: e.pageX, y: e.pageY });
 
-      if (window.clock) {
-        var time = window.clock.context.currentTime.toString().match(/[0-9]+.?[0-9]{0,2}/);
-        console.log('Time was', time[0]);
-      }
+        if (window.clock) {
+            var time = window.clock.context.currentTime.toString().match(/[0-9]+.?[0-9]{0,2}/);
+            console.log('Time was', time[0]);
+        }
     }, false);
 }

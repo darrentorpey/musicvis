@@ -62,6 +62,7 @@ export function getAudioData(url) {
 function getAudioClockFromUrl(url) {
   return getAudioData(url).then(song => {
     const clock = new WAAClock(song.context);
+
     clock.start();
     song.start();
 
