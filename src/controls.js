@@ -1,7 +1,7 @@
-import { Starburst, WaterBurst } from './effects.js';
-import { BubbleField } from './shows.js';
-import { getRandomScreenCoords } from './positioning.js';
-import { blueBlast, orangeBlast, greenBlast } from './effects.js';
+import { Starburst, WaterBurst } from 'effects';
+import { BubbleField } from 'shows';
+import { getRandomScreenCoords } from 'positioning';
+import { blueBlast, orangeBlast, greenBlast } from 'effects';
 
 export function bindToKeys() {
     window.addEventListener('keydown', function(e) {
@@ -37,7 +37,7 @@ export function bindToClicks() {
         newStarburst.moveToCoords({ x: e.pageX, y: e.pageY });
 
         if (window.clock) {
-            var time = window.clock.context.currentTime.toString().match(/[0-9]+.?[0-9]{0,2}/);
+            const time = window.clock.context.currentTime.toString().match(/[0-9]+.?[0-9]{0,2}/);
             console.log('Time was', time[0]);
         }
     }, false);

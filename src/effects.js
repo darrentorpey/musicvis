@@ -1,5 +1,5 @@
-import { Timeline } from './scheduling';
-import { getRandomScreenCoords } from './positioning.js';
+import { Timeline } from 'scheduling';
+import { getRandomScreenCoords } from 'positioning ';
 
 // Base class for complex effects
 export class Effect {

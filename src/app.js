@@ -1,8 +1,7 @@
-import { WaterBurst } from './effects.js';
-import * as Controls from './controls.js';
-import { getAudioClock } from './audio.js';
-import { Show } from './shows.js';
-import { program } from './programs.js';
+import * as Controls from 'controls';
+import { getAudioClock } from 'audio';
+import { Show } from 'shows';
+import { program } from 'programs';
 
 /*
  ========
@@ -19,14 +18,18 @@ Controls.bindToKeys();
 
 window._program = program;
 
+async function startUp() {
+  const { song, clock } = await getAudioClock({
+    url: 'http://localhost:3000/sound/first_breath_after_coma__0__4_25.mp3'
+  });
+
+  window._show = Show.start({ song, clock, program: program.full() });
+}
+
 /*
  ========
  Start up
  --------
  Start the music and run timed effects
  */
-getAudioClock({
-  url: 'http://localhost:3000/sound/first_breath_after_coma__0__4_25.mp3'
-}).then(({ song, clock }) => {
-  window._show = Show.start({ song, clock, program: program.full() });
-});
+startUp();
