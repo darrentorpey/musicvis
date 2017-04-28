@@ -1,5 +1,4 @@
-import { Starburst, WaterBurst } from 'effects';
-import { BubbleField } from 'shows';
+import { BubbleField, Starburst, WaterBurst } from 'effects';
 import { getRandomScreenCoords } from 'positioning';
 import { blueBlast, orangeBlast, greenBlast } from 'effects';
 
