@@ -1,9 +1,9 @@
-'use strict';
-
+const path = require('path');
 const webpack = require('webpack');
+const basePath = path.join(__dirname, 'src');
 
 module.exports = {
-  context: __dirname + '/src',
+  context: basePath,
   entry: {
     app: './app.js',
   },
@@ -11,17 +11,12 @@ module.exports = {
     path: __dirname + '/public/js',
     filename: '[name].bundle.js',
   },
+  resolve: {
+    modules: [
+      basePath
+    ]
+  },
   module: {
-    // loaders: [
-    //   {
-    //     test: /\.js$/,
-    //     exclude: /(node_modules|bower_components)/,
-    //     loader: 'babel-loader',
-    //     query: {
-    //       presets: ['es2015-webpack']
-    //     }
-    //   }
-    // ]
     rules: [
       {
         test: /\.js$/,
@@ -29,7 +24,7 @@ module.exports = {
         use: [{
           loader: 'babel-loader',
           options: {
-            presets: ['es2015'],
+            presets: ['es2017'],
             plugins: ['transform-object-rest-spread']
           }
         }],

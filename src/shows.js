@@ -1,4 +1,4 @@
-import { Effect, WaterBurst, blueBlast, lightBlueBlast, orangeBlast, greenBlast } from './effects';
+import { Effect, WaterBurst, blueBlast, lightBlueBlast, orangeBlast, greenBlast } from 'effects';
 
 const DEBUG = false;
 
