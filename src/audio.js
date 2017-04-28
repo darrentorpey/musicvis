@@ -1,34 +1,13 @@
-class Song {
-  constructor(buffer, source, context) {
-    this.buffer = buffer;
-    this.source = source;
-    this.context = context;
-    this.startTime = null;
-  }
+import axios from 'axios';
+import { Song } from 'songs';
 
-  stop() {
-    this.source.stop();
-  }
+function createBufferSource(audioCtx, buffer) {
+  const audioTrack = audioCtx.createBufferSource();
 
-  start(at = 0) {
-    this.source.start(0, at);
-    this.startTime = this.context.currentTime;
+  audioTrack.connect(audioCtx.destination);
+  audioTrack.buffer = buffer;
 
-    return this;
-  }
-
-  replay(at = 0) {
-    const newSource = this.context.createBufferSource(); // creates a sound source
-    newSource.buffer = this.buffer;                    // tell the source which sound to play
-    newSource.connect(this.context.destination);       // connect the source to the context's desti
-
-    this.source.stop();
-    this.source = newSource;
-
-    this.start(at);
-
-    return this;
-  }
+  return audioTrack;
 }
 
 function newDecodedSource(audioData) {
@@ -45,35 +24,19 @@ function newDecodedSource(audioData) {
   });
 }
 
-function createBufferSource(audioCtx, buffer) {
-  const audioTrack = audioCtx.createBufferSource();
-
-  audioTrack.connect(audioCtx.destination);
-  audioTrack.buffer = buffer;
-
-  return audioTrack;
-}
-
 function playAudio(audioCtx, buffer, offsetInSeconds, duration) {
   audioTrack.start(audioCtx.currentTime, offsetInSeconds,  duration);
 }
 
-
-export function getData(url) {
-  return new Promise((resolve) => {
-    var request = new XMLHttpRequest();
-    request.open('GET', url, true);
-    request.responseType = 'arraybuffer';
-    request.send();
-    request.onload = () => {
-      newDecodedSource(request.response).then(([audioCtx, buffer, source]) =>
-        resolve(new Song(buffer, source, audioCtx)));
-    }
-  });
-}
-
 export function getAudioData(url) {
-  return getData(url);
+  return axios({
+    method:       'get',
+    url:          url,
+    responseType: 'arraybuffer'
+  }).then(({ data }) =>
+    newDecodedSource(data).then(([ audioCtx, buffer, source ]) =>
+      new Song(buffer, source, audioCtx))
+  )
 }
 
 function getAudioClockFromUrl(url) {
@@ -82,8 +45,9 @@ function getAudioClockFromUrl(url) {
 
     clock.start();
     song.start();
+    song.clock = clock;
 
-    return { song, clock };
+    return song;
   });
 }
 

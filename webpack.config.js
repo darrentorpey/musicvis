@@ -13,8 +13,9 @@ module.exports = {
   },
   resolve: {
     modules: [
-      basePath
-    ]
+      basePath,
+      'node_modules'
+    ],
   },
   module: {
     rules: [
