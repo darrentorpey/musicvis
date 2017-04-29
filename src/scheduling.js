@@ -1,3 +1,5 @@
+import mojs from 'mo-js';
+
 // Mo.js utility
 export const Timeline = {
   set(...items) {

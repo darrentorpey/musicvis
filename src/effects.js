@@ -1,5 +1,6 @@
 import { Timeline } from 'scheduling';
 import { getRandomScreenCoords } from 'positioning';
+import mojs from 'mo-js';
 
 // Base class for complex effects
 export class Effect {
