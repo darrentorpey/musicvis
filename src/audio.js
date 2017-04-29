@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { Song } from 'songs';
+import WAAClock from 'waaclock';
 
 function createBufferSource(audioCtx, buffer) {
   const audioTrack = audioCtx.createBufferSource();
@@ -10,45 +11,48 @@ function createBufferSource(audioCtx, buffer) {
   return audioTrack;
 }
 
-function newDecodedSource(audioData) {
-  const audioCtx = new AudioContext();
+async function newDecodedSource(audioData) {
+  try {
+    const audioCtx = new AudioContext();
+    const buffer = await audioCtx.decodeAudioData(audioData);
+    const source = createBufferSource(audioCtx, buffer);
 
-  return new Promise((resolve) => {
-    audioCtx.decodeAudioData(audioData, buffer => {
-      const source = createBufferSource(audioCtx, buffer);
-
-      resolve([audioCtx, buffer, source]);
-    },
-    (e) => `Error with decoding audio data ${e.err}`
-    );
-  });
+    return { audioCtx, buffer, source };
+  } catch(e) {
+    throw new Error(`Error with decoding audio data ${e.err}`)
+  }
 }
 
 function playAudio(audioCtx, buffer, offsetInSeconds, duration) {
   audioTrack.start(audioCtx.currentTime, offsetInSeconds,  duration);
 }
 
-export function getAudioData(url) {
-  return axios({
-    method:       'get',
-    url:          url,
+async function getArrayBuffer(url) {
+  const { data } = await axios({
+    url,
+    method: 'get',
     responseType: 'arraybuffer'
-  }).then(({ data }) =>
-    newDecodedSource(data).then(([ audioCtx, buffer, source ]) =>
-      new Song(buffer, source, audioCtx))
-  )
+  });
+
+  return data;
 }
 
-function getAudioClockFromUrl(url) {
-  return getAudioData(url).then(song => {
-    const clock = new WAAClock(song.context);
+export async function getAudioData(url) {
+  const audioData = await getArrayBuffer(url);
+  const { buffer, source, audioCtx } = await newDecodedSource(audioData);
 
-    clock.start();
-    song.start();
-    song.clock = clock;
+  return new Song(buffer, source, audioCtx);
+}
 
-    return song;
-  });
+async function getAudioClockFromUrl(url) {
+  const song = await getAudioData(url);
+  const clock = new WAAClock(song.context);
+
+  clock.start();
+  song.start();
+  song.clock = clock;
+
+  return song;
 }
 
 export function getAudioClock(opts = {}) {
