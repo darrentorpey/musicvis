@@ -19,7 +19,7 @@ export class Show {
   constructor({ song, program }) {
     this.song = song;
     this.clock = song.clock;
-    this._originalProgram = _.clone(program);
+    this._program = _.clone(program);
     this.program = program;
   }
 
@@ -29,23 +29,23 @@ export class Show {
     this.clock.start();
   }
 
-  reschedule(seconds  ) {
+  reschedule(seconds) {
     DEBUG && console.log(`Current Time: ${this.song.startTime}`);
 
-    this.program = this._originalProgram.map(([time, action]) => {
+    this.program = this._program.map(([time, action]) => {
       let adjustedTime = time - seconds;
       return [adjustedTime, action];
     })
 
     DEBUG && this.program.forEach(([time, action]) => logScheduleItem({ action, time }));
 
-    this.start();
+    this.start({ at: seconds });
   }
 
   jumpTo(seconds) {
-    this.song.replay(seconds);
-
     this.resetClock();
+
+    this.song.reset();
 
     this.reschedule(seconds);
   }
@@ -59,12 +59,15 @@ export class Show {
     }
   }
 
-  start() {
+  start({ at } = {}) {
     for (let [time, action] of this.program) {
       this.parseActions(action).forEach(action =>
         (time > 0) && this.clock.setTimeout(action, time)
       );
     }
+
+    this.clock.start();
+    this.song.start(at);
   }
 
   stop() {
