@@ -1,11 +1,15 @@
-import axios from 'axios';
-import { Song } from 'songs';
-import WAAClock from 'waaclock';
+import { getArrayBuffer } from 'assets';
 
-function createBufferSource(audioCtx, buffer) {
-  const audioTrack = audioCtx.createBufferSource();
+/**
+ * =============
+ * Web Audio API
+ * -------------
+ */
 
-  audioTrack.connect(audioCtx.destination);
+function createBufferSource(context, buffer) {
+  const audioTrack = context.createBufferSource();
+
+  audioTrack.connect(context.destination);
   audioTrack.buffer = buffer;
 
   return audioTrack;
@@ -13,50 +17,17 @@ function createBufferSource(audioCtx, buffer) {
 
 async function newDecodedSource(audioData) {
   try {
-    const audioCtx = new AudioContext();
-    const buffer = await audioCtx.decodeAudioData(audioData);
-    const source = createBufferSource(audioCtx, buffer);
+    const context = new AudioContext();
+    const buffer = await context.decodeAudioData(audioData);
+    const source = createBufferSource(context, buffer);
 
-    return { audioCtx, buffer, source };
+    return { context, buffer, source };
   } catch(e) {
     throw new Error(`Error with decoding audio data ${e.err}`)
   }
 }
 
-function playAudio(audioCtx, buffer, offsetInSeconds, duration) {
-  audioTrack.start(audioCtx.currentTime, offsetInSeconds,  duration);
-}
-
-async function getArrayBuffer(url) {
-  const { data } = await axios({
-    url,
-    method: 'get',
-    responseType: 'arraybuffer'
-  });
-
-  return data;
-}
-
 export async function getAudioData(url) {
   const audioData = await getArrayBuffer(url);
-  const { buffer, source, audioCtx } = await newDecodedSource(audioData);
-
-  return new Song(buffer, source, audioCtx);
-}
-
-async function getAudioClockFromUrl(url) {
-  const song = await getAudioData(url);
-  const clock = new WAAClock(song.context);
-
-  clock.start();
-  song.start();
-  song.clock = clock;
-
-  return song;
-}
-
-export function getAudioClock(opts = {}) {
-  if (opts.url) {
-    return getAudioClockFromUrl(opts.url);
-  }
+  return await newDecodedSource(audioData);
 }
