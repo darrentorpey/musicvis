@@ -7,7 +7,7 @@ import WAAClock from 'waaclock';
  * ----------------
  */
 
-export class Song {
+export default class Song {
   constructor({ buffer, source, context, clock }) {
     this.buffer = buffer;
     this.source = source;
@@ -28,9 +28,12 @@ export class Song {
   }
 
   reset() {
-    const newSource = this.context.createBufferSource(); // creates a sound source
-    newSource.buffer = this.buffer;                    // tell the source which sound to play
-    newSource.connect(this.context.destination);       // connect the source to the context's desti
+    // Creates a sound source
+    const newSource = this.context.createBufferSource();
+    // Tell the source which sound to play
+    newSource.buffer = this.buffer;
+    // Connect the source to the context's desti
+    newSource.connect(this.context.destination);
 
     this.stop();
 
@@ -38,20 +41,14 @@ export class Song {
 
     return this;
   }
+
+  static from({ songName }) {
+    return getSongFromUrl(`/sound/${songName}`);
+  }
 }
 
 async function getSongFromUrl(url) {
   const { buffer, source, context } = await getAudioData(url);
   const clock = new WAAClock(context);
   return new Song({ buffer, source, context, clock });
-}
-
-export function getAudioClock({ url } = {}) {
-  if (url) {
-    return getSongFromUrl(url);
-  }
-}
-
-export function startSong(songName) {
-  return getAudioClock({ url: `/sound/${songName}` });
 }
