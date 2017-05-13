@@ -1,4 +1,4 @@
-import { getArrayBuffer } from 'assets';
+import { getArrayBuffer } from './assets'
 
 /**
  * =============
@@ -7,27 +7,32 @@ import { getArrayBuffer } from 'assets';
  */
 
 function createBufferSource(context, buffer) {
-  const audioTrack = context.createBufferSource();
+  const audioTrack = context.createBufferSource()
 
-  audioTrack.connect(context.destination);
-  audioTrack.buffer = buffer;
+  audioTrack.connect(context.destination)
+  audioTrack.buffer = buffer
 
-  return audioTrack;
+  return audioTrack
 }
 
 async function newDecodedSource(audioData) {
   try {
-    const context = new AudioContext();
-    const buffer = await context.decodeAudioData(audioData);
-    const source = createBufferSource(context, buffer);
+    const context = new AudioContext()
+    const buffer = await context.decodeAudioData(audioData)
+    const source = createBufferSource(context, buffer)
 
-    return { context, buffer, source };
-  } catch(e) {
-    throw new Error(`Error with decoding audio data ${e.err}`)
+    return { context, buffer, source }
+  } catch (e) {
+    throw new Error(`Error with decoding audio data ${e}`)
   }
 }
 
+/**
+ * Creates an AudioBuffer for the audio file at the given URL
+ * @param {string} url  the URL whose content will be buffered
+ * @return {Promise}
+ */
 export async function getAudioData(url) {
-  const audioData = await getArrayBuffer(url);
-  return await newDecodedSource(audioData);
+  const audioData = await getArrayBuffer(url)
+  return await newDecodedSource(audioData)
 }

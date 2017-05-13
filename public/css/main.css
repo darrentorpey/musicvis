@@ -2,6 +2,13 @@
   --main-color: rgb(43, 123, 160);
 }
 
+#audio_time {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-family: 'Andale Mono', 'Courier New', monospace;
+}
+
 body, html {
   background: black;
   width: 100vw;

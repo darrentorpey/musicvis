@@ -1,7 +1,8 @@
-import * as Controls from 'controls';
-import Song from 'songs';
-import Show from 'shows';
-import { program } from 'programs';
+import * as Controls from './controls'
+import Song from './songs'
+import Show from './shows'
+import HUD from './hud'
+import { EXPLOSIONS_FIRST } from './programs'
 
 /*
  * ========
@@ -14,7 +15,7 @@ import { program } from 'programs';
  *  [w] - draw water burst
  *  [t] - output current sound-time
  */
-Controls.bindToKeys();
+Controls.bindToKeys()
 
 /*
  * ========
@@ -22,10 +23,17 @@ Controls.bindToKeys();
  * --------
  * Start the music and run timed effects
  */
-(async () => {
-  const song = await Song.from({ songName:
-    'first_breath_after_coma__0__4_25.mp3'
-  });
+async function main() {
+  const song = await Song.from({
+    songName: 'first_breath_after_coma__0__4_25.mp3',
+  })
+  const startAt = new Number(new URLSearchParams(window.location.search).get('startAt'))
+  const program = EXPLOSIONS_FIRST.full()
 
-  window._show = Show.start({ song, program: program.full() });
-})();
+  const show = Show.start({ song, program, startAt })
+
+  window._show = show
+  window._hud = HUD.start(show)
+}
+
+main()

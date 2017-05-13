@@ -1,14 +1,8 @@
-function getRandomScreenCoords() {
-  const padding = 60;
-  const yMax = window.innerHeight;
-  const xMax = window.innerWidth;
+import { random } from 'lodash-es'
 
+export function getRandomScreenCoords(padding = 60) {
   return {
-    x: _.random(padding, xMax),
-    y: _.random(padding, yMax)
-  };
-}
-
-export {
-    getRandomScreenCoords
+    x: random(padding, window.innerWidth),
+    y: random(padding, window.innerHeight),
+  }
 }
