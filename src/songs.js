@@ -23,6 +23,7 @@ export default class Song {
   start(at = 0) {
     this.source.start(0, at);
     this.startTime = this.context.currentTime;
+    this.startTimeRel = at;
 
     return this;
   }
@@ -40,6 +41,10 @@ export default class Song {
     this.source = newSource;
 
     return this;
+  }
+
+  get currentTime() {
+    return this.context.currentTime - this.startTime + this.startTimeRel;
   }
 
   static from({ songName }) {

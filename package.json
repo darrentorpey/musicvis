@@ -16,6 +16,7 @@
     "express": "^4.14.0",
     "lodash": "^4.17.4",
     "mo-js": "^0.288.1",
+    "rxjs": "^5.4.0",
     "waaclock": "^0.5.3"
   },
   "devDependencies": {
