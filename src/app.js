@@ -1,9 +1,7 @@
 import * as Controls from 'controls';
-import { startSong } from 'songs';
-import { Show } from 'shows';
+import Song from 'songs';
+import Show from 'shows';
 import { program } from 'programs';
-
-// document.write(`<script src="//${location.hostname}:35729/livereload.js?snipver=1"></script>`);
 
 /*
  * ========
@@ -18,16 +16,16 @@ import { program } from 'programs';
  */
 Controls.bindToKeys();
 
-async function startShow() {
-  const song = await startSong('first_breath_after_coma__0__4_25.mp3');
-
-  return Show.start({ song, program: program.full() });
-}
-
 /*
  * ========
  * Start up
  * --------
  * Start the music and run timed effects
  */
-startShow().then(show => window._show = show);
+(async () => {
+  const song = await Song.from({ songName:
+    'first_breath_after_coma__0__4_25.mp3'
+  });
+
+  window._show = Show.start({ song, program: program.full() });
+})();

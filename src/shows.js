@@ -15,12 +15,11 @@ const actionShortcuts = {
   'boom_orange':    () => orangeBlast()
 };
 
-export class Show {
+export default class Show {
   constructor({ song, program }) {
     this.song = song;
     this.clock = song.clock;
-    this._program = _.clone(program);
-    this.program = program;
+    this._programBlueprint = _.clone(program);
   }
 
   resetClock() {
@@ -32,14 +31,12 @@ export class Show {
   reschedule(seconds) {
     DEBUG && console.log(`Current Time: ${this.song.startTime}`);
 
-    this.program = this._program.map(([time, action]) => {
-      let adjustedTime = time - seconds;
-      return [adjustedTime, action];
-    })
+    const program = _.clone(this._programBlueprint).map(([time, action]) =>
+      [time - seconds, action]);
 
-    DEBUG && this.program.forEach(([time, action]) => logScheduleItem({ action, time }));
+    DEBUG && program.forEach(([time, action]) => logScheduleItem({ action, time }));
 
-    this.start({ at: seconds });
+    this.start(program, { at: seconds });
   }
 
   jumpTo(seconds) {
@@ -59,8 +56,8 @@ export class Show {
     }
   }
 
-  start({ at } = {}) {
-    for (let [time, action] of this.program) {
+  start(program, { at } = {}) {
+    for (let [time, action] of program) {
       this.parseActions(action).forEach(action =>
         (time > 0) && this.clock.setTimeout(action, time)
       );
@@ -75,10 +72,11 @@ export class Show {
     this.song.stop();
   }
 
-  static start(...args) {
-    const show = new Show(...args);
+  static start({ song, program }) {
+    const show = new Show({ song, program });
 
-    show.start();
+    show.start(program);
+    show.jumpTo(0);
 
     return show;
   }
