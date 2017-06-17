@@ -1,6 +1,8 @@
+import _ from 'lodash';
 import { Timeline } from 'scheduling';
 import { getRandomScreenCoords } from 'positioning';
 import mojs from 'mo-js';
+import Pool from 'pool';
 
 // Base class for complex effects
 export class Effect {
@@ -37,19 +39,6 @@ export class Effect {
   }
 }
 
-export class DoubleCircle extends Effect {
-  constructor(opts = {}) {
-    super();
-
-    this.registerElement(
-      blastWaveShape({
-        color: 'rgba(249, 153, 49, 0.5)',
-        ...opts
-      })
-    );
-  }
-}
-
 function blastWaveShape({
   speed=2000,
   size=120,
@@ -72,6 +61,16 @@ function blastWaveShape({
     duration: speed,
     opacity:  { 1: 0 }
   });
+}
+
+export class DoubleCircle extends Effect {
+  constructor(opts = {}) {
+    super();
+
+    this.registerElement(
+      blastWaveShape(opts)
+    );
+  }
 }
 
 // Made of circles
@@ -110,6 +109,9 @@ const SWIRL_OPTS = {
   pathScale:      'rand(.5, 1)',
   swirlFrequency: 'rand(2,4)',
   swirlSize:      'rand(6,14)',
+  onPlaybackComplete() {
+    $(this.el).remove();
+  }
 };
 
 export class BubbleField extends Effect {
@@ -144,8 +146,6 @@ export class WaterBurst extends Effect {
   static play() {
     const waterBurst = new WaterBurst({ fill: '#4d89fd' });
     waterBurst.play();
-
-    // new MojsPlayer({ add: waterBurst.timeline });
   }
 
   constructor(opts) {
@@ -170,6 +170,8 @@ export class WaterBurst extends Effect {
     this.swirl4 = new mojs.ShapeSwirl({
       ...SWIRL_OPTS,
       ...opts
+    }).then((...args) => {
+      console.log('args', args);
     });
 
     this.registerElement(this.swirl1, this.swirl2, this.swirl3, this.swirl4);
@@ -178,37 +180,64 @@ export class WaterBurst extends Effect {
   }
 
   play() {
-    var { x, y: y } = getRandomScreenCoords();
-    y = window.innerHeight * .80;
+    var { x, y: y } = getRandomScreenCoords(0);
+    // y = window.innerHeight * .99;
+    y = window.innerHeight * 1.05;
 
     this
-      .moveTo({ x, y: { [y]: y - 150 } })
+      .moveTo({ x, y: { [y]: y - 200 } })
       .regenerate()
       .replay();
   }
 };
 
+window.pools = {
+  blueBlast: new Pool(),
+  greenBlast: new Pool(),
+  orangeBlast: new Pool(),
+};
+
+/**
+ * ~~~~~~~~~~~~~~
+ * Fill the pools
+ * ~~~~~~~~~~~~~~
+ */
+for (let i = 0; i < 10; i++) {
+  const size = _.random(2, 8);
+  const pixelSize = size * 25;
+
+  pools.greenBlast.add(new Starburst({
+    size:      pixelSize,
+    sizeStart: _.max(pixelSize/6, 45),
+    speed:     2000 - pixelSize,
+    color:     'rgba(49, 233, 149, 0.5)',
+  }));
+
+  pools.blueBlast.add(new Starburst({
+    size:  _.random(50, 200),
+    color: 'rgba(49, 153, 249, 0.5)',
+  }));
+
+  pools.orangeBlast.add(new Starburst({
+    size: _.random(100, 150),
+    color: 'rgba(249, 153, 49, 0.5)',
+  }));
+}
+
 function play(effect, opts) {
-  new Starburst(opts).play();
+  new effect(opts).play();
 }
 
 function burst(opts) {
   new Starburst(opts).play();
 }
 
-export function orangeBlast() {
-  play(Starburst, {
-    size: _.random(100, 150),
-    ...getRandomScreenCoords()
-  });
-}
-
-export function blueBlast() {
-  play(Starburst, {
-    size:  _.random(50, 200),
-    color: 'rgba(49, 153, 249, 0.5)',
-    ...getRandomScreenCoords()
-  });
+/**
+ * Makes a blaster function for the given effect
+ * A blaster gets a random blast from the pool and fires it at a random location on the screen
+ */
+function blaster(effectName) {
+  return () => pools[effectName].next().moveToCoords(getRandomScreenCoords());
 }
 
 export function lightBlueBlast() {
@@ -219,15 +248,16 @@ export function lightBlueBlast() {
   });
 }
 
-export function greenBlast() {
-  const size = _.random(2, 8);
-  const pixelSize = size * 25;
 
-  play(Starburst, {
-    size:      pixelSize,
-    sizeStart: _.max(pixelSize/6, 45),
-    speed:     2000 - pixelSize,
-    color:     'rgba(49, 233, 149, 0.5)',
-    ...getRandomScreenCoords()
-  });
+const Effects = {};
+
+for (let effect of ['greenBlast', 'blueBlast', 'orangeBlast']) {
+  Effects[effect] = blaster(effect);
+}
+
+Effects.WaterBurst = WaterBurst;
+Effects.lightBlueBlast = lightBlueBlast;
+
+export {
+  Effects,
 }

@@ -3,6 +3,7 @@ import Song from 'songs';
 import Show from 'shows';
 import HUD from 'hud';
 import { program } from 'programs';
+
 /*
  * ========
  * Controls
@@ -27,7 +28,9 @@ Controls.bindToKeys();
     'first_breath_after_coma__0__4_25.mp3'
   });
 
-  const show = Show.start({ song, program: program.full() });
+  const startAt = new Number(new URLSearchParams(window.location.search).get('startAt'));
+
+  const show = Show.start({ song, program: program.full(), startAt });
   window._show = show;
 
   window._hud = HUD.start(show);

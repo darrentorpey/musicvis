@@ -1,18 +1,18 @@
 import { BubbleField, Starburst, WaterBurst } from 'effects';
 import { getRandomScreenCoords } from 'positioning';
-import { blueBlast, orangeBlast, greenBlast } from 'effects';
+import { Effects } from 'effects';
 
 export function bindToKeys() {
     window.addEventListener('keydown', function(e) {
       switch(e.key) {
         case 'z':
-          orangeBlast();
+          Effects.orangeBlast();
           break;
         case 'x':
-          blueBlast();
+          Effects.blueBlast();
           break;
         case 'c':
-          greenBlast();
+          Effects.greenBlast();
           break;
         case 'w':
           WaterBurst.play();
