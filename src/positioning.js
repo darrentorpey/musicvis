@@ -1,14 +1,6 @@
-function getRandomScreenCoords() {
-  const padding = 60;
-  const yMax = window.innerHeight;
-  const xMax = window.innerWidth;
-
+export function getRandomScreenCoords(padding = 60) {
   return {
-    x: _.random(padding, xMax),
-    y: _.random(padding, yMax)
+    x: _.random(padding, window.innerWidth),
+    y: _.random(padding, window.innerHeight)
   };
-}
-
-export {
-    getRandomScreenCoords
 }

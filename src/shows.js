@@ -1,5 +1,7 @@
-import { Effect, WaterBurst, blueBlast, lightBlueBlast, orangeBlast, greenBlast } from 'effects';
+import { Effects } from 'effects';
 import _ from 'lodash';
+
+const { WaterBurst, blueBlast, lightBlueBlast, orangeBlast, greenBlast } = Effects;
 
 const DEBUG = false;
 
@@ -72,11 +74,11 @@ export default class Show {
     this.song.stop();
   }
 
-  static start({ song, program }) {
+  static start({ song, program, startAt = 0 }) {
     const show = new Show({ song, program });
 
     show.start(program);
-    show.jumpTo(0);
+    show.jumpTo(startAt);
 
     return show;
   }
