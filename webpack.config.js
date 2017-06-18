@@ -25,8 +25,13 @@ module.exports = {
         use: [{
           loader: 'babel-loader',
           options: {
-            presets: ['es2017'],
-            plugins: ['transform-object-rest-spread']
+            presets: [
+              ['env', {
+                'targets': {
+                  'chrome': 59
+                },
+              }]
+            ],
           }
         }],
       },
