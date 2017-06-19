@@ -15,7 +15,7 @@ export function bindToKeys() {
           Effects.greenBlast();
           break;
         case 'w':
-          WaterBurst.play();
+          Effects.waterBurst();
           break;
         case 't':
           const time = _show.song.currentTime.toString().match(/[0-9]+.?[0-9]{0,2}/)[0];

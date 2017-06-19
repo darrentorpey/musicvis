@@ -255,7 +255,7 @@ for (let effect of ['greenBlast', 'blueBlast', 'orangeBlast']) {
   Effects[effect] = blaster(effect);
 }
 
-Effects.WaterBurst = WaterBurst;
+Effects.waterBurst = () => WaterBurst.play();
 Effects.lightBlueBlast = lightBlueBlast;
 
 export {
