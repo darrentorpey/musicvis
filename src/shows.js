@@ -1,7 +1,7 @@
 import { Effects } from 'effects';
 import _ from 'lodash';
 
-const { WaterBurst, blueBlast, lightBlueBlast, orangeBlast, greenBlast } = Effects;
+const { waterBurst, blueBlast, lightBlueBlast, orangeBlast, greenBlast } = Effects;
 
 const DEBUG = false;
 
@@ -10,7 +10,7 @@ function logScheduleItem({ action, time }) {
 }
 
 const actionShortcuts = {
-  'water':          () => WaterBurst.play(),
+  'water':          () => waterBurst(),
   'boom_green':     () => greenBlast(),
   'boom_blue':      () => blueBlast(),
   'boom_lightblue': () => lightBlueBlast(),
