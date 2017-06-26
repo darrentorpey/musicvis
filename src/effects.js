@@ -98,6 +98,8 @@ export class Starburst {
     this.moveTo(coords);
 
     this.timeline.replay();
+
+    return this;
   }
 }
 
@@ -192,9 +194,11 @@ export class WaterBurst extends Effect {
 };
 
 window.pools = {
-  blueBlast: new Pool(),
-  greenBlast: new Pool(),
-  orangeBlast: new Pool(),
+  waterBurst:     new Pool(),
+  blueBlast:      new Pool(),
+  greenBlast:     new Pool(),
+  orangeBlast:    new Pool(),
+  lightBlueBlast: new Pool(),
 };
 
 /**
@@ -219,17 +223,18 @@ for (let i = 0; i < 10; i++) {
   }));
 
   pools.orangeBlast.add(new Starburst({
-    size: _.random(100, 150),
+    size:  _.random(100, 150),
     color: 'rgba(249, 153, 49, 0.5)',
+  }));
+
+  pools.lightBlueBlast.add(new Starburst({
+    size:  _.random(50, 200),
+    color: 'rgba(95, 210, 251, 0.5)',
   }));
 }
 
-function play(effect, opts) {
-  new effect(opts).play();
-}
-
-function burst(opts) {
-  new Starburst(opts).play();
+for (let i = 0; i < 30; i++) {
+  pools.waterBurst.add(new WaterBurst({ fill: '#4d89fd' }));
 }
 
 /**
@@ -240,23 +245,22 @@ function blaster(effectName) {
   return () => pools[effectName].next().moveToCoords(getRandomScreenCoords());
 }
 
-export function lightBlueBlast() {
-  play(Starburst, {
-    size:  _.random(50, 200),
-    color: 'rgba(95, 210, 251, 0.5)',
-    ...getRandomScreenCoords()
-  });
+/**
+ * Makes a player for the given effect
+ */
+function player(effectName) {
+  return () => pools[effectName].next().play();
 }
 
+const randomSplashEvents = ['greenBlast', 'blueBlast', 'orangeBlast', 'lightBlueBlast'];
 
-const Effects = {};
+const Effects = _.fromPairs([
+  ['waterBurst', player('waterBurst')],
+  ...randomSplashEvents.map(eff =>
+    [eff, blaster(eff)]),
+]);
 
-for (let effect of ['greenBlast', 'blueBlast', 'orangeBlast']) {
-  Effects[effect] = blaster(effect);
-}
-
-Effects.waterBurst = () => WaterBurst.play();
-Effects.lightBlueBlast = lightBlueBlast;
+window._Effects = Effects;
 
 export {
   Effects,

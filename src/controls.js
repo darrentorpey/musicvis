@@ -17,6 +17,9 @@ export function bindToKeys() {
         case 'w':
           Effects.waterBurst();
           break;
+        case 'v':
+          Effects.lightBlueBlast();
+          break;
         case 't':
           const time = _show.song.currentTime.toString().match(/[0-9]+.?[0-9]{0,2}/)[0];
           console.log('Time was', time);
