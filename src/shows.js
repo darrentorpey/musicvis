@@ -1,7 +1,13 @@
 import { Effects } from 'effects';
 import _ from 'lodash';
 
-const { waterBurst, blueBlast, lightBlueBlast, orangeBlast, greenBlast } = Effects;
+const {
+  waterBurst,
+  blueBlast,
+  lightBlueBlast,
+  orangeBlast,
+  greenBlast,
+} = Effects;
 
 const DEBUG = false;
 
@@ -10,11 +16,11 @@ function logScheduleItem({ action, time }) {
 }
 
 const actionShortcuts = {
-  'water':          () => waterBurst(),
-  'boom_green':     () => greenBlast(),
-  'boom_blue':      () => blueBlast(),
-  'boom_lightblue': () => lightBlueBlast(),
-  'boom_orange':    () => orangeBlast()
+  water: () => waterBurst(),
+  boom_green: () => greenBlast(),
+  boom_blue: () => blueBlast(),
+  boom_lightblue: () => lightBlueBlast(),
+  boom_orange: () => orangeBlast(),
 };
 
 export default class Show {
@@ -26,17 +32,20 @@ export default class Show {
 
   resetClock() {
     this.clock.stop();
-    this.clock._events = []
+    this.clock._events = [];
     this.clock.start();
   }
 
   reschedule(seconds) {
     DEBUG && console.log(`Current Time: ${this.song.startTime}`);
 
-    const program = _.clone(this._programBlueprint).map(([time, action]) =>
-      [time - seconds, action]);
+    const program = _.clone(this._programBlueprint).map(([time, action]) => [
+      time - seconds,
+      action,
+    ]);
 
-    DEBUG && program.forEach(([time, action]) => logScheduleItem({ action, time }));
+    DEBUG &&
+      program.forEach(([time, action]) => logScheduleItem({ action, time }));
 
     this.start(program, { at: seconds });
   }
@@ -60,8 +69,8 @@ export default class Show {
 
   start(program, { at } = {}) {
     for (let [time, action] of program) {
-      this.parseActions(action).forEach(action =>
-        (time > 0) && this.clock.setTimeout(action, time)
+      this.parseActions(action).forEach(
+        action => time > 0 && this.clock.setTimeout(action, time)
       );
     }
 

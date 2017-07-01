@@ -5,7 +5,9 @@ export default class Pool {
     }
 
     *nextPointer() {
-        if ( ++this.pointer >= this._items.length ) { this.pointer = 0; }
+        if (++this.pointer >= this._items.length) {
+            this.pointer = 0;
+        }
         yield this.pointer;
     }
 

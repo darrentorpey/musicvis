@@ -9,5 +9,5 @@ export const Timeline = {
     const timeline = new mojs.Timeline();
     timeline.add(...items);
     return timeline;
-  }
+  },
 };
