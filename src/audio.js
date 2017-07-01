@@ -22,8 +22,8 @@ async function newDecodedSource(audioData) {
     const source = createBufferSource(context, buffer);
 
     return { context, buffer, source };
-  } catch(e) {
-    throw new Error(`Error with decoding audio data ${e.err}`)
+  } catch (e) {
+    throw new Error(`Error with decoding audio data ${e.err}`);
   }
 }
 

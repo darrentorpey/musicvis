@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { Timeline } from 'scheduling';
 import { getRandomScreenCoords } from 'positioning';
 import mojs from 'mo-js';
-import Pool from 'pool';
+import Pool c from 'pool';
 
 // Base class for complex effects
 export class Effect {
@@ -18,7 +18,7 @@ export class Effect {
   }
 
   moveTo(coords) {
-    this._elements.forEach((el) => {
+    this._elements.forEach(el => {
       el.tune(coords);
     });
     return this;
@@ -40,26 +40,25 @@ export class Effect {
 }
 
 function blastWaveShape({
-  speed=2000,
-  size=120,
-  sizeStart=size/4,
-  color='white',
-  colorTo='black', // rgba(234, 197, 178, 0.2)
-  x=0, y=0
+  speed = 2000,
+  size = 120,
+  sizeStart = size / 4,
+  color = 'white',
+  colorTo = 'black', // rgba(234, 197, 178, 0.2)
+  x = 0,
+  y = 0,
 }) {
   return new mojs.Shape({
-    left: x, top: y,
+    left: x,
+    top: y,
     count: 10,
-    // stroke: { '#e2441d' : '#f99931' },
-    stroke: color,//'#e2441d', // color
-    // stroke: { '#e2441d' : 'rgba(249, 153, 49, 0.5)' },
-    // strokeWidth: { 50 : 0 },
+    stroke: color,
     strokeWidth: 50,
     fill: colorTo,
     scale: { 0: 1.5, easing: 'elastic.out' },
-    radius: { [sizeStart] : size },
+    radius: { [sizeStart]: size },
     duration: speed,
-    opacity:  { 1: 0 }
+    opacity: { 1: 0 },
   });
 }
 
@@ -67,9 +66,7 @@ export class DoubleCircle extends Effect {
   constructor(opts = {}) {
     super();
 
-    this.registerElement(
-      blastWaveShape(opts)
-    );
+    this.registerElement(blastWaveShape(opts));
   }
 }
 
@@ -83,7 +80,7 @@ export class Starburst {
   initSet(opts) {
     this.circle = new DoubleCircle(opts);
 
-    this.timeline = Timeline.set( this.circle.elements );
+    this.timeline = Timeline.set(this.circle.elements);
   }
 
   moveTo(coords) {
@@ -104,16 +101,17 @@ export class Starburst {
 }
 
 const SWIRL_OPTS = {
-  left: 0, top: 0,
-  fill:           '#F93E39',
-  duration:       'rand(600, 1000)',
-  radius:         'rand(10, 20)',
-  pathScale:      'rand(.5, 1)',
+  left: 0,
+  top: 0,
+  fill: '#F93E39',
+  duration: 'rand(600, 1000)',
+  radius: 'rand(10, 20)',
+  pathScale: 'rand(.5, 1)',
   swirlFrequency: 'rand(2,4)',
-  swirlSize:      'rand(6,14)',
+  swirlSize: 'rand(6,14)',
   onPlaybackComplete() {
     $(this.el).remove();
-  }
+  },
 };
 
 export class BubbleField extends Effect {
@@ -126,17 +124,17 @@ export class BubbleField extends Effect {
   makeBursts(opts) {
     opts = {
       height: 150,
-      ...opts
-    }
-    // const xCoords = [1,2,3,4,5].map(i => i * 150);
-    const xCoords = [1,2,3,4,5,6,7,8].map(i => ({
+      ...opts,
+    };
+
+    const xCoords = [1, 2, 3, 4, 5, 6, 7, 8].map(i => ({
       fill: '#6d89fd',
       duration: `rand(200, ${_.random(400, 1200)})`,
-      x: 50 + (i * 150),
-      y: { [opts.y]: opts.y - opts.height }
+      x: 50 + i * 150,
+      y: { [opts.y]: opts.y - opts.height },
     }));
 
-    return xCoords.map(props => new WaterBurst(props))
+    return xCoords.map(props => new WaterBurst(props));
   }
 
   play() {
@@ -155,30 +153,35 @@ export class WaterBurst extends Effect {
 
     this.swirl1 = new mojs.ShapeSwirl({
       ...SWIRL_OPTS,
-      ...opts
+      ...opts,
     });
 
     this.swirl2 = new mojs.ShapeSwirl({
       ...SWIRL_OPTS,
       ...opts,
-      direction: -1
+      direction: -1,
     });
 
     this.swirl3 = new mojs.ShapeSwirl({
       ...SWIRL_OPTS,
-      ...opts
+      ...opts,
     });
 
     this.swirl4 = new mojs.ShapeSwirl({
       ...SWIRL_OPTS,
-      ...opts
+      ...opts,
     }).then((...args) => {
       console.log('args', args);
     });
 
     this.registerElement(this.swirl1, this.swirl2, this.swirl3, this.swirl4);
 
-    this.timeline = Timeline.set([this.swirl1, this.swirl2, this.swirl3, this.swirl4]);
+    this.timeline = Timeline.set([
+      this.swirl1,
+      this.swirl2,
+      this.swirl3,
+      this.swirl4,
+    ]);
   }
 
   play() {
@@ -186,18 +189,15 @@ export class WaterBurst extends Effect {
     // y = window.innerHeight * .99;
     y = window.innerHeight * 1.05;
 
-    this
-      .moveTo({ x, y: { [y]: y - 200 } })
-      .regenerate()
-      .replay();
+    this.moveTo({ x, y: { [y]: y - 200 } }).regenerate().replay();
   }
-};
+}
 
 window.pools = {
-  waterBurst:     new Pool(),
-  blueBlast:      new Pool(),
-  greenBlast:     new Pool(),
-  orangeBlast:    new Pool(),
+  waterBurst: new Pool(),
+  blueBlast: new Pool(),
+  greenBlast: new Pool(),
+  orangeBlast: new Pool(),
   lightBlueBlast: new Pool(),
 };
 
@@ -210,27 +210,35 @@ for (let i = 0; i < 10; i++) {
   const size = _.random(2, 8);
   const pixelSize = size * 25;
 
-  pools.greenBlast.add(new Starburst({
-    size:      pixelSize,
-    sizeStart: _.max(pixelSize/6, 45),
-    speed:     2000 - pixelSize,
-    color:     'rgba(49, 233, 149, 0.5)',
-  }));
+  pools.greenBlast.add(
+    new Starburst({
+      size: pixelSize,
+      sizeStart: _.max(pixelSize / 6, 45),
+      speed: 2000 - pixelSize,
+      color: 'rgba(49, 233, 149, 0.5)',
+    })
+  );
 
-  pools.blueBlast.add(new Starburst({
-    size:  _.random(50, 200),
-    color: 'rgba(49, 153, 249, 0.5)',
-  }));
+  pools.blueBlast.add(
+    new Starburst({
+      size: _.random(50, 200),
+      color: 'rgba(49, 153, 249, 0.5)',
+    })
+  );
 
-  pools.orangeBlast.add(new Starburst({
-    size:  _.random(100, 150),
-    color: 'rgba(249, 153, 49, 0.5)',
-  }));
+  pools.orangeBlast.add(
+    new Starburst({
+      size: _.random(100, 150),
+      color: 'rgba(249, 153, 49, 0.5)',
+    })
+  );
 
-  pools.lightBlueBlast.add(new Starburst({
-    size:  _.random(50, 200),
-    color: 'rgba(95, 210, 251, 0.5)',
-  }));
+  pools.lightBlueBlast.add(
+    new Starburst({
+      size: _.random(50, 200),
+      color: 'rgba(95, 210, 251, 0.5)',
+    })
+  );
 }
 
 for (let i = 0; i < 30; i++) {
@@ -252,16 +260,18 @@ function player(effectName) {
   return () => pools[effectName].next().play();
 }
 
-const randomSplashEvents = ['greenBlast', 'blueBlast', 'orangeBlast', 'lightBlueBlast'];
+const randomSplashEvents = [
+  'greenBlast',
+  'blueBlast',
+  'orangeBlast',
+  'lightBlueBlast',
+];
 
 const Effects = _.fromPairs([
   ['waterBurst', player('waterBurst')],
-  ...randomSplashEvents.map(eff =>
-    [eff, blaster(eff)]),
+  ...randomSplashEvents.map(eff => [eff, blaster(eff)]),
 ]);
 
 window._Effects = Effects;
 
-export {
-  Effects,
-}
+export { Effects };
