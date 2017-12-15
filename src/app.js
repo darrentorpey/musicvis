@@ -1,5 +1,5 @@
 import * as Controls from 'controls';
-import Song from 'songs';
+import {Song} from 'songs';
 import Show from 'shows';
 import HUD from 'hud';
 import { program } from 'programs';

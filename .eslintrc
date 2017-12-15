@@ -1,4 +1,7 @@
 {
+    "plugins": [
+        "prettier"
+    ],
     "globals": {
         "_": true,
         "describe": true,
@@ -13,7 +16,7 @@
     "rules": {
         "indent": [
             "error",
-            4,
+            2,
             {
                 "SwitchCase": 1
             }
@@ -26,7 +29,7 @@
             }
         ],
         "linebreak-style": ["error","unix"],
-        "semi": ["error","always"],
+        "semi": ["error","never"],
         "curly": "error",
         "default-case": "error",
         "dot-location": ["error","property"],
@@ -73,6 +76,14 @@
         "no-lonely-if": "error",
         "no-continue": "error",
         "eol-last": "error",
+        "prettier/prettier": [
+            "error",
+            {
+                "singleQuote": true,
+                "trailingComma": "es5",
+                "semi": false
+            }
+        ]
     },
     "env": {
         "es6": true,
@@ -87,9 +98,6 @@
         "ecmaFeatures": {
             "experimentalObjectRestSpread": true
         }
-    },
-    "ecmaFeatures": {
-        "modules": true,
     },
     "extends": "eslint:recommended"
 }
