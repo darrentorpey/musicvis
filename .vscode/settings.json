@@ -1,0 +1,10 @@
+{
+  "editor.tabSize": 2,
+  "eslint.autoFixOnSave": true,
+  "eslint.enable": true,
+  "files.exclude": {
+    "**/.*cache": true,
+    "**/node_modules": true,
+    "public/js/app.bundle.js": true
+  }
+}
