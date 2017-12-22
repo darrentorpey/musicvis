@@ -1,8 +1,10 @@
-import _ from 'lodash'
-import { Timeline } from 'scheduling'
-import { getRandomScreenCoords } from 'positioning'
+// @ts-check
+import { random } from 'lodash-es'
+
+import { Timeline } from './scheduling'
+import { getRandomScreenCoords } from './positioning'
 import mojs from 'mo-js'
-import Pool from 'pool'
+import Pool from './pool'
 
 // Base class for complex effects
 export class Effect {
@@ -195,13 +197,15 @@ export class WaterBurst extends Effect {
   }
 }
 
-window.pools = {
+const pools = {
   waterBurst: new Pool(),
   blueBlast: new Pool(),
   greenBlast: new Pool(),
   orangeBlast: new Pool(),
   lightBlueBlast: new Pool(),
 }
+
+window.pools = pools
 
 /**
  * ~~~~~~~~~~~~~~
