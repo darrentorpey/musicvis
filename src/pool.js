@@ -1,4 +1,12 @@
-export default class Pool {
+// @ts-check
+
+/**
+//  * @typedef Pool
+ * @type {object}
+ * @property {any[]} _items - an array of items
+ * @property {number} pointer - internal pointer
+ */
+class Pool {
   constructor(items = []) {
     this._items = items
     this.pointer = -1
@@ -11,6 +19,9 @@ export default class Pool {
     yield this.pointer
   }
 
+  /**
+   * @param {any} item - an item to add
+   */
   add(item) {
     this._items.push(item)
   }
@@ -19,3 +30,5 @@ export default class Pool {
     return this._items[this.nextPointer().next().value]
   }
 }
+
+export default Pool

@@ -1,10 +1,10 @@
-import { Effects } from 'effects'
-import _ from 'lodash'
+import { clone, isFunction } from 'lodash-es'
+
+import { Effects } from './effects'
 
 const {
   waterBurst,
-  blueBlast,
-  lightBlueBlast,
+  blueBlast,  lightBlueBlast,
   orangeBlast,
   greenBlast,
 } = Effects
@@ -27,7 +27,7 @@ export default class Show {
   constructor({ song, program }) {
     this.song = song
     this.clock = song.clock
-    this._programBlueprint = _.clone(program)
+    this._programBlueprint = clone(program)
   }
 
   resetClock() {
@@ -39,13 +39,12 @@ export default class Show {
   reschedule(seconds) {
     DEBUG && console.log(`Current Time: ${this.song.startTime}`)
 
-    const program = _.clone(this._programBlueprint).map(([time, action]) => [
+    const program = clone(this._programBlueprint).map(([time, action]) => [
       time - seconds,
       action,
     ])
 
-    DEBUG
-      && program.forEach(([time, action]) => logScheduleItem({ action, time }))
+    DEBUG && program.forEach(([time, action]) => logScheduleItem({ action, time }))
 
     this.start(program, { at: seconds })
   }
@@ -59,7 +58,7 @@ export default class Show {
   }
 
   parseActions(action) {
-    if (_.isFunction(action)) {
+    if (isFunction(action)) {
       return [action]
     } else {
       const actions = action.split('|')
