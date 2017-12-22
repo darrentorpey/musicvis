@@ -1,6 +1,4 @@
-import { BubbleField, Starburst, WaterBurst } from 'effects'
-import { getRandomScreenCoords } from 'positioning'
-import { Effects } from 'effects'
+import { BubbleField, Effects, Starburst } from './effects'
 
 export function bindToKeys() {
   window.addEventListener('keydown', function(e) {
@@ -21,15 +19,13 @@ export function bindToKeys() {
         Effects.lightBlueBlast()
         break
       case 't':
-        const time = _show.song.currentTime
-          .toString()
-          .match(/[0-9]+.?[0-9]{0,2}/)[0]
-        console.log('Time was', time)
+        console.log('Time was', window._show.getCurrentTime())
         break
       case 'g':
-        const bf = new BubbleField({ y: window.innerHeight * 0.8 })
-        bf.play()
+        BubbleField.play({ y: window.innerHeight * 0.8 })
         break
+      default:
+        return
     }
   })
 }
@@ -43,9 +39,7 @@ export function bindToClicks() {
       newStarburst.moveToCoords({ x: e.pageX, y: e.pageY })
 
       if (window.clock) {
-        const time = window.clock.context.currentTime
-          .toString()
-          .match(/[0-9]+.?[0-9]{0,2}/)
+        const time = window.clock.context.currentTime.toString().match(/[0-9]+.?[0-9]{0,2}/)
         console.log('Time was', time[0])
       }
     },
