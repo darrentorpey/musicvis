@@ -2,12 +2,7 @@ import { clone, isFunction } from 'lodash-es'
 
 import { Effects } from './effects'
 
-const {
-  waterBurst,
-  blueBlast,  lightBlueBlast,
-  orangeBlast,
-  greenBlast,
-} = Effects
+const { waterBurst, blueBlast, lightBlueBlast, orangeBlast, greenBlast } = Effects
 
 const DEBUG = false
 
@@ -23,7 +18,7 @@ const actionShortcuts = {
   boom_orange: () => orangeBlast(),
 }
 
-export default class Show {
+class Show {
   constructor({ song, program }) {
     this.song = song
     this.clock = song.clock
@@ -36,13 +31,14 @@ export default class Show {
     this.clock.start()
   }
 
+  getCurrentTime() {
+    return this.song.currentTime.toString().match(/[0-9]+.?[0-9]{0,2}/)[0]
+  }
+
   reschedule(seconds) {
     DEBUG && console.log(`Current Time: ${this.song.startTime}`)
 
-    const program = clone(this._programBlueprint).map(([time, action]) => [
-      time - seconds,
-      action,
-    ])
+    const program = clone(this._programBlueprint).map(([time, action]) => [time - seconds, action])
 
     DEBUG && program.forEach(([time, action]) => logScheduleItem({ action, time }))
 
@@ -68,9 +64,7 @@ export default class Show {
 
   start(program, { at } = {}) {
     for (const [time, action] of program) {
-      this.parseActions(action).forEach(
-        action => time > 0 && this.clock.setTimeout(action, time)
-      )
+      this.parseActions(action).forEach(action => time > 0 && this.clock.setTimeout(action, time))
     }
 
     this.clock.start()
@@ -91,3 +85,5 @@ export default class Show {
     return show
   }
 }
+
+export default Show

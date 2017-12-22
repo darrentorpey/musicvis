@@ -112,7 +112,7 @@ const SWIRL_OPTS = {
   swirlFrequency: 'rand(2,4)',
   swirlSize: 'rand(6,14)',
   onPlaybackComplete() {
-    $(this.el).remove()
+    this.el.remove()
   },
 }
 
@@ -123,6 +123,10 @@ export class BubbleField extends Effect {
     this.registerElement(...this.makeBursts(opts))
   }
 
+  static play(...constructorArgs) {
+    new BubbleField(...constructorArgs).play()
+  }
+
   makeBursts(opts) {
     opts = {
       height: 150,
@@ -131,7 +135,7 @@ export class BubbleField extends Effect {
 
     const xCoords = [1, 2, 3, 4, 5, 6, 7, 8].map(i => ({
       fill: '#6d89fd',
-      duration: `rand(200, ${_.random(400, 1200)})`,
+      duration: `rand(200, ${random(400, 1200)})`,
       x: 50 + i * 150,
       y: { [opts.y]: opts.y - opts.height },
     }))
@@ -178,12 +182,7 @@ export class WaterBurst extends Effect {
 
     this.registerElement(this.swirl1, this.swirl2, this.swirl3, this.swirl4)
 
-    this.timeline = Timeline.set([
-      this.swirl1,
-      this.swirl2,
-      this.swirl3,
-      this.swirl4,
-    ])
+    this.timeline = Timeline.set([this.swirl1, this.swirl2, this.swirl3, this.swirl4])
   }
 
   play() {
@@ -213,7 +212,7 @@ window.pools = pools
  * ~~~~~~~~~~~~~~
  */
 for (let i = 0; i < 10; i++) {
-  const size = _.random(2, 8)
+  const size = random(2, 8)
   const pixelSize = size * 25
 
   pools.greenBlast.add(
@@ -227,21 +226,21 @@ for (let i = 0; i < 10; i++) {
 
   pools.blueBlast.add(
     new Starburst({
-      size: _.random(50, 200),
+      size: random(50, 200),
       color: 'rgba(49, 153, 249, 0.5)',
     })
   )
 
   pools.orangeBlast.add(
     new Starburst({
-      size: _.random(100, 150),
+      size: random(100, 150),
       color: 'rgba(249, 153, 49, 0.5)',
     })
   )
 
   pools.lightBlueBlast.add(
     new Starburst({
-      size: _.random(50, 200),
+      size: random(50, 200),
       color: 'rgba(95, 210, 251, 0.5)',
     })
   )
@@ -266,12 +265,7 @@ function player(effectName) {
   return () => pools[effectName].next().play()
 }
 
-const randomSplashEvents = [
-  'greenBlast',
-  'blueBlast',
-  'orangeBlast',
-  'lightBlueBlast',
-]
+const randomSplashEvents = ['greenBlast', 'blueBlast', 'orangeBlast', 'lightBlueBlast']
 
 const Effects = _.fromPairs([
   ['waterBurst', player('waterBurst')],

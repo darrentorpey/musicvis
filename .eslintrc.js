@@ -40,13 +40,6 @@ module.exports = {
     'no-implied-eval': 'error',
     'no-lone-blocks': 'error',
     'no-loop-func': 'error',
-    'no-magic-numbers': [
-      'warn',
-      {
-        'ignoreArrayIndexes': true,
-        'ignore': [-1, 0, 1]
-      }
-    ],
     'no-self-compare': 'error',
     'arrow-spacing': ['error', { 'before': true, 'after': true }],
     'space-before-blocks': ['error', { 'functions': 'always', 'keywords': 'always', 'classes': 'always' }],

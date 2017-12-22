@@ -28,9 +28,7 @@ Controls.bindToKeys()
     songName: 'first_breath_after_coma__0__4_25.mp3',
   })
 
-  const startAt = new Number(
-    new URLSearchParams(window.location.search).get('startAt')
-  )
+  const startAt = new Number(new URLSearchParams(window.location.search).get('startAt'))
 
   const show = Show.start({ song, program: program.full(), startAt })
   window._show = show
