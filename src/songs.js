@@ -1,5 +1,6 @@
-import { getAudioData } from 'audio'
 import WAAClock from 'waaclock'
+
+import { getAudioData } from './audio'
 
 /**
  * ================

@@ -1,11 +1,3 @@
-// @ts-check
-
-/**
-//  * @typedef Pool
- * @type {object}
- * @property {any[]} _items - an array of items
- * @property {number} pointer - internal pointer
- */
 class Pool {
   constructor(items = []) {
     this._items = items

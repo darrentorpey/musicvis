@@ -1,6 +1,8 @@
+import { random } from 'lodash-es'
+
 export function getRandomScreenCoords(padding = 60) {
   return {
-    x: _.random(padding, window.innerWidth),
-    y: _.random(padding, window.innerHeight),
+    x: random(padding, window.innerWidth),
+    y: random(padding, window.innerHeight),
   }
 }
