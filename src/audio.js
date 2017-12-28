@@ -27,6 +27,11 @@ async function newDecodedSource(audioData) {
   }
 }
 
+/**
+ * Creates an AudioBuffer for the audio file at the given URL
+ * @param {string} url  the URL whose content will be buffered
+ * @return {Promise}
+ */
 export async function getAudioData(url) {
   const audioData = await getArrayBuffer(url)
   return await newDecodedSource(audioData)

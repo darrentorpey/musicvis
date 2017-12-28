@@ -19,6 +19,9 @@ const actionShortcuts = {
 }
 
 class Show {
+  /**
+   * @param
+   */
   constructor({ song, program }) {
     this.song = song
     this.clock = song.clock
@@ -45,6 +48,9 @@ class Show {
     this.start(program, { at: seconds })
   }
 
+  /**
+   * @param {Number} seconds  meow
+   */
   jumpTo(seconds) {
     this.resetClock()
 
@@ -76,13 +82,27 @@ class Show {
     this.song.stop()
   }
 
-  static start({ song, program, startAt = 0 }) {
-    const show = new Show({ song, program })
+  /**
+   * @param {Object} pims
+   * @param {Number} pims.song  the song for the program
+   * @param {Number} pims.program  the visual effects program
+   * @param {Number} pims.startAt  the start point
+   */
+  static start({ song, program, startAt = new Number(0) }) {
+    const show = Show.build({ song, program })
 
     show.start(program)
     show.jumpTo(startAt)
 
     return show
+  }
+
+  /**
+   * @param {Song} song
+   * @param {Program} program
+   */
+  static build({ song, program }) {
+    return new this({ song, program })
   }
 }
 

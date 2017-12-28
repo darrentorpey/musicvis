@@ -1,5 +1,4 @@
-// @ts-check
-import { random } from 'lodash-es'
+import { fromPairs, max, random } from 'lodash-es'
 
 import { Timeline } from './scheduling'
 import { getRandomScreenCoords } from './positioning'
@@ -218,7 +217,7 @@ for (let i = 0; i < 10; i++) {
   pools.greenBlast.add(
     new Starburst({
       size: pixelSize,
-      sizeStart: _.max(pixelSize / 6, 45),
+      sizeStart: max(pixelSize / 6, 45),
       speed: 2000 - pixelSize,
       color: 'rgba(49, 233, 149, 0.5)',
     })
@@ -267,10 +266,7 @@ function player(effectName) {
 
 const randomSplashEvents = ['greenBlast', 'blueBlast', 'orangeBlast', 'lightBlueBlast']
 
-const Effects = _.fromPairs([
-  ['waterBurst', player('waterBurst')],
-  ...randomSplashEvents.map(eff => [eff, blaster(eff)]),
-])
+const Effects = fromPairs([['waterBurst', player('waterBurst')], ...randomSplashEvents.map(eff => [eff, blaster(eff)])])
 
 window._Effects = Effects
 

@@ -26,7 +26,7 @@ function from(time) {
   return new Maker(time)
 }
 
-export const program = {
+export const EXPLOSIONS_FIRST = {
   full(startFrom = 0) {
     return this.events.map(([v1, v2]) => [v1 - startFrom, v2])
   },
