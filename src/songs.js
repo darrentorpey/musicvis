@@ -1,6 +1,6 @@
 import WAAClock from 'waaclock'
 
-import { getAudioData } from './audio'
+import { getAreYouAwake, getAudioData } from './audio'
 
 /**
  * ================
@@ -50,6 +50,10 @@ class Song {
 
   static from({ songName }) {
     return getSongFromUrl(`http://localhost:3000/sound/${songName}`)
+  }
+
+  static fromUrl(url) {
+    return getSongFromUrl(url)
   }
 }
 

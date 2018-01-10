@@ -38,6 +38,9 @@
     "lodash-es": "4.17.4"
   },
   "babel": {
+    "plugins": [
+      "transform-object-rest-spread"
+    ],
     "presets": [
       [
         "env",
