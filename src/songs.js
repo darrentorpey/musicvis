@@ -48,10 +48,6 @@ class Song {
     return this.context.currentTime - this.startTime + this.startTimeRel
   }
 
-  static from({ songName }) {
-    return getSongFromUrl(`http://localhost:3000/sound/${songName}`)
-  }
-
   static fromUrl(url) {
     return getSongFromUrl(url)
   }
