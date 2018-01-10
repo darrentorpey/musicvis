@@ -1,4 +1,4 @@
-import { getArrayBuffer } from 'assets'
+import { getArrayBuffer } from './assets'
 
 /**
  * =============
@@ -23,7 +23,7 @@ async function newDecodedSource(audioData) {
 
     return { context, buffer, source }
   } catch (e) {
-    throw new Error(`Error with decoding audio data ${e.err}`)
+    throw new Error(`Error with decoding audio data ${e}`)
   }
 }
 
