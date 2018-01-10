@@ -1,6 +1,6 @@
 import WAAClock from 'waaclock'
 
-import { getAreYouAwake, getAudioData } from './audio'
+import { getAudioData } from './audio'
 
 /**
  * ================
@@ -48,15 +48,11 @@ class Song {
     return this.context.currentTime - this.startTime + this.startTimeRel
   }
 
-  static fromUrl(url) {
-    return getSongFromUrl(url)
+  static async fromUrl(url) {
+    const { buffer, source, context } = await getAudioData(url)
+    const clock = new WAAClock(context)
+    return new Song({ buffer, source, context, clock })
   }
-}
-
-async function getSongFromUrl(url) {
-  const { buffer, source, context } = await getAudioData(url)
-  const clock = new WAAClock(context)
-  return new Song({ buffer, source, context, clock })
 }
 
 export default Song
