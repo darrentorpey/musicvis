@@ -3,6 +3,7 @@ import Song from './songs'
 import Show from './shows'
 import HUD from './hud'
 import { EXPLOSIONS_FIRST } from './programs'
+import areYouAwakeMp3 from '../assets/are_you_awake.mp3'
 
 /*
  * ========
@@ -24,9 +25,7 @@ Controls.bindToKeys()
  * Start the music and run timed effects
  */
 async function main() {
-  const song = await Song.from({
-    songName: 'first_breath_after_coma__0__4_25.mp3',
-  })
+  const song = await Song.fromUrl(areYouAwakeMp3)
   const startAt = new Number(new URLSearchParams(window.location.search).get('startAt'))
   const program = EXPLOSIONS_FIRST.full()
 

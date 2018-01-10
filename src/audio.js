@@ -16,6 +16,7 @@ function createBufferSource(context, buffer) {
 }
 
 async function newDecodedSource(audioData) {
+  console.log('audioData', audioData)
   try {
     const context = new AudioContext()
     const buffer = await context.decodeAudioData(audioData)

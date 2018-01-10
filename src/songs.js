@@ -48,15 +48,11 @@ class Song {
     return this.context.currentTime - this.startTime + this.startTimeRel
   }
 
-  static from({ songName }) {
-    return getSongFromUrl(`http://localhost:3000/sound/${songName}`)
+  static async fromUrl(url) {
+    const { buffer, source, context } = await getAudioData(url)
+    const clock = new WAAClock(context)
+    return new Song({ buffer, source, context, clock })
   }
-}
-
-async function getSongFromUrl(url) {
-  const { buffer, source, context } = await getAudioData(url)
-  const clock = new WAAClock(context)
-  return new Song({ buffer, source, context, clock })
 }
 
 export default Song
