@@ -1,5 +1,4 @@
 import { getArrayBuffer } from './assets'
-import areYouAwake from '../assets/are_you_awake.mp3'
 
 /**
  * =============
@@ -36,10 +35,5 @@ async function newDecodedSource(audioData) {
  */
 export async function getAudioData(url) {
   const audioData = await getArrayBuffer(url)
-  return await newDecodedSource(audioData)
-}
-
-export async function getAreYouAwake() {
-  const audioData = await getArrayBuffer(areYouAwake)
   return await newDecodedSource(audioData)
 }
