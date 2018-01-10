@@ -3,12 +3,6 @@
   "version": "1.0.0",
   "description": "Explosions in the sky",
   "main": "index.js",
-  "scripts": {
-    "start": "parcel index.html",
-    "build": "babel src -d lib",
-    "babel-node": "babel-node --presets=/*a*/ --ignore='foo|bar|baz'",
-    "lint": "eslint src"
-  },
   "author": "Darren Torpey",
   "license": "ISC",
   "devDependencies": {
@@ -34,16 +28,14 @@
       "transform-object-rest-spread"
     ],
     "presets": [
-      [
-        "env",
-        {
-          "targets": {
-            "browsers": [
-              "last 2 Chrome versions"
-            ]
-          }
-        }
-      ]
+      ["env", {
+        "targets": { "browsers": ["last 2 Chrome versions"] }
+      }]
     ]
+  },
+  "scripts": {
+    "start": "parcel index.html",
+    "prod": "parcel build index.html",
+    "lint": "eslint src"
   }
 }
