@@ -1,8 +1,10 @@
+dist
 node_modules
 lib
 public/lib
 public/js
 yarn.lock
+.cache
 .DS_Store
 *.sublime-*
 npm-debug.log

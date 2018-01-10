@@ -4,6 +4,7 @@
   "description": "Explosions in the sky",
   "main": "index.js",
   "scripts": {
+    "start": "parcel index.html",
     "build": "babel src -d lib",
     "babel-node": "babel-node --presets=/*a*/ --ignore='foo|bar|baz'",
     "lint": "eslint src"
@@ -13,7 +14,7 @@
   "devDependencies": {
     "axios": "^0.16.1",
     "babel-cli": "^6.18.0",
-    "babel-core": "^6.25.0",
+    "babel-core": "6.26.0",
     "babel-loader": "^7.0.0",
     "babel-plugin-syntax-async-functions": "^6.13.0",
     "babel-plugin-syntax-object-rest-spread": "^6.13.0",
@@ -25,8 +26,9 @@
     "eslint": "4.13.1",
     "eslint-config-prettier": "2.9.0",
     "eslint-plugin-prettier": "2.4.0",
-    "express": "^4.14.0",
+    "express": "4.16.2",
     "mo-js": "^0.288.1",
+    "parcel-bundler": "1.4.1",
     "prettier": "1.9.2",
     "rxjs": "^5.4.0",
     "waaclock": "^0.5.3",
@@ -34,6 +36,21 @@
     "webpack-dev-server": "^2.4.5"
   },
   "dependencies": {
+    "cors": "2.8.4",
     "lodash-es": "4.17.4"
+  },
+  "babel": {
+    "presets": [
+      [
+        "env",
+        {
+          "targets": {
+            "browsers": [
+              "last 2 Chrome versions"
+            ]
+          }
+        }
+      ]
+    ]
   }
 }

@@ -49,7 +49,7 @@ class Song {
   }
 
   static from({ songName }) {
-    return getSongFromUrl(`/sound/${songName}`)
+    return getSongFromUrl(`http://localhost:3000/sound/${songName}`)
   }
 }
 
