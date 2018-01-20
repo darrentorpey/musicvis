@@ -1,6 +1,6 @@
 import WAAClock from 'waaclock'
 
-import { getAudioData } from './audio'
+import { createBufferSource, getAudioData } from './audio'
 
 /**
  * ================
@@ -29,13 +29,31 @@ class Song {
     return this
   }
 
+  get volume() {
+    return this.source.gainNode.gain.value
+  }
+
+  setVolume(val) {
+    this.source.gainNode.gain.setValueAtTime(val, this.context.currentTime)
+
+    return this
+  }
+
+  mute() {
+    this.oldVolume = this.source.gainNode.gain.value
+    this.setVolume(0)
+  }
+
+  unmute() {
+    this.setVolume(this.oldVolume)
+  }
+
+  toggleMute() {
+    this.volume ? this.mute() : this.unmute()
+  }
+
   reset() {
-    // Creates a sound source
-    const newSource = this.context.createBufferSource()
-    // Tell the source which sound to play
-    newSource.buffer = this.buffer
-    // Connect the source to the context's desti
-    newSource.connect(this.context.destination)
+    const newSource = createBufferSource(this.context, this.buffer)
 
     this.stop()
 
@@ -49,7 +67,7 @@ class Song {
   }
 
   static async fromUrl(url) {
-    const { buffer, source, context } = await getAudioData(url)
+    const { buffer, context, source } = await getAudioData(url)
     const clock = new WAAClock(context)
     return new Song({ buffer, source, context, clock })
   }
