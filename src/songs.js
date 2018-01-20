@@ -41,15 +41,19 @@ class Song {
 
   mute() {
     this.oldVolume = this.source.gainNode.gain.value
+    this.muted = true
     this.setVolume(0)
   }
 
   unmute() {
+    this.muted = false
     this.setVolume(this.oldVolume)
   }
 
   toggleMute() {
     this.volume ? this.mute() : this.unmute()
+
+    return !this.muted
   }
 
   reset() {

@@ -1,4 +1,4 @@
-:root{
+:root {
   --main-color: rgb(43, 123, 160);
 }
 
@@ -9,7 +9,14 @@
   font-family: 'Andale Mono', 'Courier New', monospace;
 }
 
-body, html {
+#sound_status {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+}
+
+body,
+html {
   background: black;
   width: 100vw;
   height: 100vh;

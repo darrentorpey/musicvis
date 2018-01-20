@@ -1,7 +1,7 @@
 import { BubbleField, Effects, Starburst } from './effects'
 
 const actions = {
-  m: () => window._show.song.toggleMute(),
+  m: () => window._show.toggleMute(),
   t: () => console.log('Time was', window._show.getCurrentTime()),
 }
 
