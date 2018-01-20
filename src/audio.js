@@ -6,23 +6,26 @@ import { getArrayBuffer } from './assets'
  * -------------
  */
 
-function createBufferSource(context, buffer) {
+export function createBufferSource(context, buffer) {
   const audioTrack = context.createBufferSource()
+  const gainNode = context.createGain()
 
-  audioTrack.connect(context.destination)
+  audioTrack.gainNode = gainNode
   audioTrack.buffer = buffer
+
+  audioTrack.connect(gainNode)
+  gainNode.connect(context.destination)
 
   return audioTrack
 }
 
 async function newDecodedSource(audioData) {
-  console.log('audioData', audioData)
   try {
     const context = new AudioContext()
     const buffer = await context.decodeAudioData(audioData)
     const source = createBufferSource(context, buffer)
 
-    return { context, buffer, source }
+    return { buffer, context, source }
   } catch (e) {
     throw new Error(`Error with decoding audio data ${e}`)
   }
