@@ -1,6 +1,6 @@
 import WAAClock from 'waaclock'
 
-import { createBufferSource, getAudioData } from './audio'
+import { cloneSource, getAudioSource } from './audio'
 
 /**
  * ================
@@ -9,10 +9,8 @@ import { createBufferSource, getAudioData } from './audio'
  */
 
 class Song {
-  constructor({ buffer, source, context, clock }) {
-    this.buffer = buffer
+  constructor({ source, clock }) {
     this.source = source
-    this.context = context
     this.clock = clock
     this.startTime = null
   }
@@ -23,7 +21,7 @@ class Song {
 
   start(at = 0) {
     this.source.start(0, at)
-    this.startTime = this.context.currentTime
+    this.startTime = this.source.context.currentTime
     this.startTimeRel = at
 
     return this
@@ -34,7 +32,7 @@ class Song {
   }
 
   setVolume(val) {
-    this.source.gainNode.gain.setValueAtTime(val, this.context.currentTime)
+    this.source.gainNode.gain.setValueAtTime(val, this.source.context.currentTime)
 
     return this
   }
@@ -57,23 +55,26 @@ class Song {
   }
 
   reset() {
-    const newSource = createBufferSource(this.context, this.buffer)
-
     this.stop()
 
-    this.source = newSource
+    this.source = cloneSource(this.source)
 
     return this
   }
 
+  resetTo(spot) {
+    this.reset()
+    this.start(spot)
+  }
+
   get currentTime() {
-    return this.context.currentTime - this.startTime + this.startTimeRel
+    return this.source.context.currentTime - this.startTime + this.startTimeRel
   }
 
   static async fromUrl(url) {
-    const { buffer, context, source } = await getAudioData(url)
-    const clock = new WAAClock(context)
-    return new Song({ buffer, source, context, clock })
+    const source = await getAudioSource(url)
+    const clock = new WAAClock(source.context)
+    return new Song({ source, clock })
   }
 }
 

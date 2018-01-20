@@ -1,24 +1,14 @@
 import { clone, isFunction } from 'lodash-es'
 
-import { Effects } from './effects'
+import { fireEffect } from './orchestrator'
 
 import volumeX from '../assets/volume-x.svg'
 import volume2 from '../assets/volume-2.svg'
-
-const { waterBurst, blueBlast, lightBlueBlast, orangeBlast, greenBlast } = Effects
 
 const DEBUG = false
 
 function logScheduleItem({ action, time }) {
   console.log(`[${time}] [${action}]`)
-}
-
-const actionShortcuts = {
-  water: () => waterBurst(),
-  boom_green: () => greenBlast(),
-  boom_blue: () => blueBlast(),
-  boom_lightblue: () => lightBlueBlast(),
-  boom_orange: () => orangeBlast(),
 }
 
 function drawSvgIcon(target, path) {
@@ -70,12 +60,30 @@ class Show {
     this.reschedule(seconds)
   }
 
+  parseAction(row) {
+    const actions = []
+
+    row.split('|').forEach(a => {
+      const match = a.match(/(.*)\*(\d)/)
+      if (match) {
+        const [, effect, num] = match
+        Array(parseInt(num))
+          .fill()
+          .forEach(() => actions.push(effect))
+      } else {
+        actions.push(a)
+      }
+    })
+
+    return actions
+  }
+
   parseActions(action) {
     if (isFunction(action)) {
+      console.log('action', action)
       return [action]
     } else {
-      const actions = action.split('|')
-      return actions.map(action => actionShortcuts[action])
+      return this.parseAction(action).map(action => () => fireEffect(action))
     }
   }
 
@@ -84,7 +92,7 @@ class Show {
       this.parseActions(action).forEach(action => time > 0 && this.clock.setTimeout(action, time))
     }
 
-    this.song.setVolume(0.2)
+    this.song.setVolume(0.1)
     this.clock.start()
     this.song.start(at)
   }

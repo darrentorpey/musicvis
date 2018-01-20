@@ -1,52 +1,55 @@
-import { BubbleField, Effects, Starburst } from './effects'
+import { throttle } from 'lodash'
 
+import { BubbleField, Starburst } from './effects'
+import { logTime, report } from './logger'
+import { addEffect } from './orchestrator'
+
+/*
+ * ========
+ * Controls
+ * --------
+ * Keys:
+ *  [c] - effect: draw green burst
+ *  [g] - effect: bubble field
+ *  [r] - report on all ad-hoc added effects
+ *  [t] - output current sound-time
+ *  [v] - effect: draw light blue burst
+ *  [w] - effect: draw water burst
+ *  [x] - effect: draw blue burst
+ *  [z] - effect: draw orange burst
+ */
 const actions = {
+  c: () => addEffect('boom_green'),
+  g: () => BubbleField.play({ y: window.innerHeight * 0.8 }),
   m: () => window._show.toggleMute(),
-  t: () => console.log('Time was', window._show.getCurrentTime()),
+  r: () => report(),
+  t: () => logTime('Time was '),
+  v: () => addEffect('boom_lightblue'),
+  w: () => addEffect('water'),
+  x: () => addEffect('boom_blue'),
+  z: () => addEffect('boom_orange'),
 }
 
 export function bindToKeys() {
-  window.addEventListener('keydown', function(e) {
-    let action
-    switch (e.key) {
-      case 'z':
-        Effects.orangeBlast()
-        break
-      case 'x':
-        Effects.blueBlast()
-        break
-      case 'c':
-        Effects.greenBlast()
-        break
-      case 'w':
-        Effects.waterBurst()
-        break
-      case 'v':
-        Effects.lightBlueBlast()
-        break
-      case 'g':
-        BubbleField.play({ y: window.innerHeight * 0.8 })
-        break
-      default:
-        action = actions[e.key]
-        return action ? action() : null
-    }
-  })
+  document.addEventListener(
+    'keydown',
+    throttle(e => {
+      const action = actions[e.key]
+
+      action ? action() : null
+    }, 100)
+  )
 }
 
 export function bindToClicks() {
-  document.addEventListener(
-    'click',
-    function(e) {
-      const newStarburst = new Starburst()
+  document.addEventListener('click', e => {
+    const newStarburst = new Starburst()
 
-      newStarburst.moveToCoords({ x: e.pageX, y: e.pageY })
+    newStarburst.moveToCoords({ x: e.pageX, y: e.pageY })
 
-      if (window.clock) {
-        const time = window.clock.context.currentTime.toString().match(/[0-9]+.?[0-9]{0,2}/)
-        console.log('Time was', time[0])
-      }
-    },
-    false
-  )
+    if (window.clock) {
+      const time = window.clock.context.currentTime.toString().match(/[0-9]+.?[0-9]{0,2}/)
+      console.log('Time was', time[0])
+    }
+  })
 }

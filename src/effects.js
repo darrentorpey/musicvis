@@ -203,14 +203,14 @@ const pools = {
   lightBlueBlast: new Pool(),
 }
 
-window.pools = pools
-
+const POOL_SIZE = 10
+const WATER_POOL_SIZE = POOL_SIZE * 3
 /**
  * ~~~~~~~~~~~~~~
  * Fill the pools
  * ~~~~~~~~~~~~~~
  */
-for (let i = 0; i < 10; i++) {
+for (let i = 0; i < POOL_SIZE; i++) {
   const size = random(2, 8)
   const pixelSize = size * 25
 
@@ -245,7 +245,7 @@ for (let i = 0; i < 10; i++) {
   )
 }
 
-for (let i = 0; i < 30; i++) {
+for (let i = 0; i < WATER_POOL_SIZE; i++) {
   pools.waterBurst.add(new WaterBurst({ fill: '#4d89fd' }))
 }
 
