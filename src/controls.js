@@ -1,7 +1,13 @@
 import { BubbleField, Effects, Starburst } from './effects'
 
+const actions = {
+  m: () => window._show.toggleMute(),
+  t: () => console.log('Time was', window._show.getCurrentTime()),
+}
+
 export function bindToKeys() {
   window.addEventListener('keydown', function(e) {
+    let action
     switch (e.key) {
       case 'z':
         Effects.orangeBlast()
@@ -18,14 +24,12 @@ export function bindToKeys() {
       case 'v':
         Effects.lightBlueBlast()
         break
-      case 't':
-        console.log('Time was', window._show.getCurrentTime())
-        break
       case 'g':
         BubbleField.play({ y: window.innerHeight * 0.8 })
         break
       default:
-        return
+        action = actions[e.key]
+        return action ? action() : null
     }
   })
 }

@@ -2,6 +2,9 @@ import { clone, isFunction } from 'lodash-es'
 
 import { Effects } from './effects'
 
+import volumeX from '../assets/volume-x.svg'
+import volume2 from '../assets/volume-2.svg'
+
 const { waterBurst, blueBlast, lightBlueBlast, orangeBlast, greenBlast } = Effects
 
 const DEBUG = false
@@ -16,6 +19,10 @@ const actionShortcuts = {
   boom_blue: () => blueBlast(),
   boom_lightblue: () => lightBlueBlast(),
   boom_orange: () => orangeBlast(),
+}
+
+function drawSvgIcon(target, path) {
+  document.querySelector(target).innerHTML = `<img src="${path}" />`
 }
 
 class Show {
@@ -36,6 +43,10 @@ class Show {
 
   getCurrentTime() {
     return this.song.currentTime.toString().match(/[0-9]+.?[0-9]{0,2}/)[0]
+  }
+
+  toggleMute() {
+    drawSvgIcon('#sound_status', this.song.toggleMute() ? volume2 : volumeX)
   }
 
   reschedule(seconds) {
@@ -73,6 +84,7 @@ class Show {
       this.parseActions(action).forEach(action => time > 0 && this.clock.setTimeout(action, time))
     }
 
+    this.song.setVolume(0.2)
     this.clock.start()
     this.song.start(at)
   }
