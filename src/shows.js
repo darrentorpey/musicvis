@@ -84,7 +84,7 @@ class Show {
       this.parseActions(action).forEach(action => time > 0 && this.clock.setTimeout(action, time))
     }
 
-    this.song.setVolume(0.2)
+    this.song.setVolume(0.1)
     this.clock.start()
     this.song.start(at)
   }
