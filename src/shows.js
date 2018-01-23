@@ -1,24 +1,14 @@
 import { clone, isFunction } from 'lodash-es'
 
-import { Effects } from './effects'
+import { fireEffect } from './orchestrator'
 
 import volumeX from '../assets/volume-x.svg'
 import volume2 from '../assets/volume-2.svg'
-
-const { waterBurst, blueBlast, lightBlueBlast, orangeBlast, greenBlast } = Effects
 
 const DEBUG = false
 
 function logScheduleItem({ action, time }) {
   console.log(`[${time}] [${action}]`)
-}
-
-const actionShortcuts = {
-  water: () => waterBurst(),
-  boom_green: () => greenBlast(),
-  boom_blue: () => blueBlast(),
-  boom_lightblue: () => lightBlueBlast(),
-  boom_orange: () => orangeBlast(),
 }
 
 function drawSvgIcon(target, path) {
@@ -75,7 +65,7 @@ class Show {
       return [action]
     } else {
       const actions = action.split('|')
-      return actions.map(action => actionShortcuts[action])
+      return actions.map(action => () => fireEffect(action))
     }
   }
 
@@ -103,8 +93,10 @@ class Show {
   static start({ song, program, startAt = new Number(0) }) {
     const show = Show.build({ song, program })
 
+    // setTimeout(() => {
     show.start(program)
     show.jumpTo(startAt)
+    // })
 
     return show
   }
