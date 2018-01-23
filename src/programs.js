@@ -37,7 +37,7 @@ export const ARE_YOU_AWAKE = program([
   [0.89, 'boom_orange'],
   [1.57, 'boom_green'],
   [2.5, 'boom_green*3'],
-  [2.5, 'boom_blue|boom_blue*15|boom_blue'],
+  [2.5, 'boom_blue*2|boom_orange*3'],
   [7.5, 'boom_lightblue'],
   [7.9, 'boom_orange'],
   [8.4, 'boom_green'],
@@ -54,18 +54,18 @@ export const EXPLOSIONS_FIRST = {
   },
   events: [
     [0.4, 'boom_lightblue'],
-    // ...from(4.3)
-    //   .to(24.3)
-    //   .every(4.0)
-    //   .add('boom_blue'),
-    // ...from(24)
-    //   .to(102)
-    //   .every(0.2)
-    //   .add('water|water|water|water|water'),
-    // ...from(26.6)
-    //   .to(101.3)
-    //   .every(1.0)
-    //   .add('boom_lightblue'),
-    // [60.0, 'water|water|water|water|water'],
+    ...from(4.3)
+      .to(24.3)
+      .every(4.0)
+      .add('boom_blue'),
+    ...from(24)
+      .to(102)
+      .every(0.2)
+      .add('water|water|water|water|water'),
+    ...from(26.6)
+      .to(101.3)
+      .every(1.0)
+      .add('boom_lightblue'),
+    [60.0, 'water|water|water|water|water'],
   ],
 }

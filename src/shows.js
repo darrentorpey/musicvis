@@ -66,8 +66,7 @@ class Show {
     row.split('|').forEach(a => {
       const match = a.match(/(.*)\*(\d)/)
       if (match) {
-        const effect = match[1]
-        const num = match[2]
+        const [, effect, num] = match
         Array(parseInt(num))
           .fill()
           .forEach(() => actions.push(effect))
