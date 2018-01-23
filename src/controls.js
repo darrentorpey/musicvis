@@ -1,13 +1,17 @@
 import { BubbleField, Effects, Starburst } from './effects'
+import { logTime, report } from './logger'
+import { addEffect } from './orchestrator'
 
 const actions = {
-  m: () => window._show.toggleMute(),
-  t: () => console.log('Time was', window._show.getCurrentTime()),
+  // c: () => addEffect('boom_green'),
+  c: () => addEffect('boom_green'),
   g: () => BubbleField.play({ y: window.innerHeight * 0.8 }),
-  x: () => Effects.blueBlast(),
-  c: () => Effects.greenBlast(),
-  w: () => Effects.waterBurst(),
+  m: () => window._show.toggleMute(),
+  r: () => report(),
+  t: () => logTime('Time was '),
   v: () => Effects.lightBlueBlast(),
+  w: () => Effects.waterBurst(),
+  x: () => Effects.blueBlast(),
   z: () => Effects.orangeBlast(),
 }
 
