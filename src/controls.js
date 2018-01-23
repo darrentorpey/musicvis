@@ -1,18 +1,17 @@
-import { BubbleField, Effects, Starburst } from './effects'
+import { BubbleField, Starburst } from './effects'
 import { logTime, report } from './logger'
 import { addEffect } from './orchestrator'
 
 const actions = {
-  // c: () => addEffect('boom_green'),
   c: () => addEffect('boom_green'),
   g: () => BubbleField.play({ y: window.innerHeight * 0.8 }),
   m: () => window._show.toggleMute(),
   r: () => report(),
   t: () => logTime('Time was '),
-  v: () => Effects.lightBlueBlast(),
-  w: () => Effects.waterBurst(),
-  x: () => Effects.blueBlast(),
-  z: () => Effects.orangeBlast(),
+  v: () => addEffect('boom_lightblue'),
+  w: () => addEffect('water'),
+  x: () => addEffect('boom_blue'),
+  z: () => addEffect('boom_orange'),
 }
 
 export function bindToKeys() {

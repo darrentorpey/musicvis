@@ -14,5 +14,6 @@ export function fireEffect(name) {
 }
 
 export function addEffect(name) {
-  fireEffect(name) && logProgram(name)
+  fireEffect(name)
+  logProgram(name)
 }

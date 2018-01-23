@@ -60,12 +60,31 @@ class Show {
     this.reschedule(seconds)
   }
 
+  parseAction(row) {
+    const actions = []
+
+    row.split('|').forEach(a => {
+      const match = a.match(/(.*)\*(\d)/)
+      if (match) {
+        const effect = match[1]
+        const num = match[2]
+        Array(parseInt(num))
+          .fill()
+          .forEach(() => actions.push(effect))
+      } else {
+        actions.push(a)
+      }
+    })
+
+    return actions
+  }
+
   parseActions(action) {
     if (isFunction(action)) {
+      console.log('action', action)
       return [action]
     } else {
-      const actions = action.split('|')
-      return actions.map(action => () => fireEffect(action))
+      return this.parseAction(action).map(action => () => fireEffect(action))
     }
   }
 
