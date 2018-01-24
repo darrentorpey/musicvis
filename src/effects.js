@@ -5,6 +5,8 @@ import { getRandomScreenCoords } from './positioning'
 import mojs from 'mo-js'
 import Pool from './pool'
 
+const DEFAULT_PARENT_SELECTOR = '#effects'
+
 // Base class for complex effects
 export class Effect {
   constructor() {
@@ -41,6 +43,7 @@ export class Effect {
 }
 
 function blastWaveShape({
+  parent = DEFAULT_PARENT_SELECTOR,
   speed = 2000,
   size = 120,
   sizeStart = size / 4,
@@ -50,6 +53,7 @@ function blastWaveShape({
   y = 0,
 }) {
   return new mojs.Shape({
+    parent,
     left: x,
     top: y,
     count: 10,
@@ -102,6 +106,7 @@ export class Starburst {
 }
 
 const SWIRL_OPTS = {
+  parent: DEFAULT_PARENT_SELECTOR,
   left: 0,
   top: 0,
   fill: '#F93E39',
@@ -119,7 +124,9 @@ export class BubbleField extends Effect {
   constructor(opts = { y: 250 }) {
     super()
 
-    this.registerElement(...this.makeBursts(opts))
+    const options = { opts, parent: '#effects' }
+
+    this.registerElement(...this.makeBursts(options))
   }
 
   static play(...constructorArgs) {
