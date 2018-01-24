@@ -111,10 +111,8 @@ class Show {
   static start({ song, program, startAt = new Number(0) }) {
     const show = Show.build({ song, program })
 
-    // setTimeout(() => {
     show.start(program)
     show.jumpTo(startAt)
-    // })
 
     return show
   }

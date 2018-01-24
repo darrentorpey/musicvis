@@ -62,6 +62,11 @@ class Song {
     return this
   }
 
+  resetTo(spot) {
+    this.reset()
+    this.start(spot)
+  }
+
   get currentTime() {
     return this.source.context.currentTime - this.startTime + this.startTimeRel
   }

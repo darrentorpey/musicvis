@@ -1,7 +1,23 @@
+import { throttle } from 'lodash'
+
 import { BubbleField, Starburst } from './effects'
 import { logTime, report } from './logger'
 import { addEffect } from './orchestrator'
 
+/*
+ * ========
+ * Controls
+ * --------
+ * Keys:
+ *  [c] - effect: draw green burst
+ *  [g] - effect: bubble field
+ *  [r] - report on all ad-hoc added effects
+ *  [t] - output current sound-time
+ *  [v] - effect: draw light blue burst
+ *  [w] - effect: draw water burst
+ *  [x] - effect: draw blue burst
+ *  [z] - effect: draw orange burst
+ */
 const actions = {
   c: () => addEffect('boom_green'),
   g: () => BubbleField.play({ y: window.innerHeight * 0.8 }),
@@ -15,26 +31,25 @@ const actions = {
 }
 
 export function bindToKeys() {
-  window.addEventListener('keydown', function(e) {
-    const action = actions[e.key]
+  document.addEventListener(
+    'keydown',
+    throttle(e => {
+      const action = actions[e.key]
 
-    action ? action() : null
-  })
+      action ? action() : null
+    }, 100)
+  )
 }
 
 export function bindToClicks() {
-  document.addEventListener(
-    'click',
-    function(e) {
-      const newStarburst = new Starburst()
+  document.addEventListener('click', e => {
+    const newStarburst = new Starburst()
 
-      newStarburst.moveToCoords({ x: e.pageX, y: e.pageY })
+    newStarburst.moveToCoords({ x: e.pageX, y: e.pageY })
 
-      if (window.clock) {
-        const time = window.clock.context.currentTime.toString().match(/[0-9]+.?[0-9]{0,2}/)
-        console.log('Time was', time[0])
-      }
-    },
-    false
-  )
+    if (window.clock) {
+      const time = window.clock.context.currentTime.toString().match(/[0-9]+.?[0-9]{0,2}/)
+      console.log('Time was', time[0])
+    }
+  })
 }

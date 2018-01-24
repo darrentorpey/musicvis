@@ -32,12 +32,13 @@ function program(events) {
   }
 }
 
+export const BLANK = program([])
+
 export const ARE_YOU_AWAKE = program([
   [0.26, 'boom_lightblue'],
   [0.89, 'boom_orange'],
   [1.57, 'boom_green'],
-  [2.5, 'boom_green*3'],
-  [2.5, 'boom_blue*2|boom_orange*3'],
+  [2.5, 'boom_green'],
   [7.5, 'boom_lightblue'],
   [7.9, 'boom_orange'],
   [8.4, 'boom_green'],
