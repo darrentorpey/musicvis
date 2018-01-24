@@ -3,8 +3,8 @@ import Song from './songs'
 import Show from './shows'
 import HUD from './hud'
 import * as Programs from './programs'
-import areYouAwakeMp3 from '../assets/are_you_awake.mp3'
-// import firstBreathMp3 from '../assets/first_breath_after_coma__0__4_25.mp3'
+import areYouAwakeMp3 from '../assets/copyrighted/are_you_awake.mp3'
+// import firstBreathMp3 from '../assets/copyrighted/first_breath_after_coma__0__4_25.mp3'
 
 const startAt = new Number(new URLSearchParams(window.location.search).get('startAt'))
 
