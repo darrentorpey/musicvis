@@ -4,6 +4,13 @@ import { BubbleField, Starburst } from './effects'
 import { logTime, report } from './logger'
 import { addEffect } from './orchestrator'
 
+const tweaks = {
+  count: 4,
+  strokeWidth: 40,
+  // easing: 'sin.out',
+  easing: 'back.out',
+  scaleTo: 2,
+}
 /*
  * ========
  * Controls
@@ -20,6 +27,7 @@ import { addEffect } from './orchestrator'
  */
 const actions = {
   c: () => addEffect('boom_green'),
+  d: () => new Starburst(tweaks).moveToCoords({ x: 150, y: 150 }),
   g: () => BubbleField.play({ y: window.innerHeight * 0.8 }),
   m: () => window._show.toggleMute(),
   r: () => report(),
